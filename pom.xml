@@ -11,17 +11,16 @@
 
     <modules>
         <module>core</module>
+        <module>elastisearch</module>
+        <module>freemarker</module>
+        <module>jpa</module>
+        <module>mongodb</module>
+        <module>mybatis</module>
+        <module>mysqldb</module>
         <module>rabbitmq</module>
         <module>redis</module>
-        <module>elastisearch</module>
-        <module>mongodb</module>
-        <module>mysqldb</module>
-        <module>swagger</module>
         <module>security</module>
-        <module>mybatis</module>
-        <module>jpa</module>
-        <module>logger</module>
-        <module>freemarker</module>
+        <module>swagger</module>
         <module>thymeleaf</module>
     </modules>
 
