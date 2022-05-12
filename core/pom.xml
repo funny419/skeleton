@@ -3,16 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>core</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <description>core</description>
+    <packaging>jar</packaging>
+
     <parent>
         <groupId>com.funny</groupId>
         <artifactId>modules</artifactId>
         <version>0.0.1</version>
     </parent>
-
-    <name>core</name>
-    <artifactId>core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <description>core</description>
 
     <properties>
         <common-lang3.version>3.12.0</common-lang3.version>
@@ -20,7 +20,7 @@
         <slf4j.version>1.7.36</slf4j.version>
         <logback.version>1.1.7</logback.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <fastjson.version>2.0.1</fastjson.version>
+        <fastjson.version>2.0.2</fastjson.version>
         <jsoup.version>1.14.3</jsoup.version>
         <javax-mail.version>1.4.7</javax-mail.version>
         <lombok.version>1.18.24</lombok.version>
@@ -87,18 +87,4 @@
             <version>${jsoup.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

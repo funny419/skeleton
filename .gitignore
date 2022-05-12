@@ -61,3 +61,11 @@ hs_err_pid*
 /thymeleaf/.mvn/
 /thymeleaf/mvnw
 /thymeleaf/mvnw.cmd
+/utils/.mvn/
+/utils/mvnw
+/utils/mvnw.cmd
+/async/.mvn/
+/async/async.iml
+/async/HELP.md
+/async/mvnw
+/async/mvnw.cmd
