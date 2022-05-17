@@ -35,6 +35,7 @@ public class Emptys {
     public static final String EMPTY_STRING = "";
 
     public static final Object NULL_PLACEHOLDER = new NullPlaceholder();
+
     private final static class NullPlaceholder implements Serializable {
         private static final long serialVersionUID = 6750975940662946832L;
 

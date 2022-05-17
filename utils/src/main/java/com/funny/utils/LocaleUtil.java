@@ -118,8 +118,10 @@ public class LocaleUtil {
         LinkedList<String> result = CollectionUtil.createLinkedList();
         String language = locale.getLanguage();
         int languageLength = language.length();
+
         String country = locale.getCountry();
         int countryLength = country.length();
+
         String variant = locale.getVariant();
         int variantLength = variant.length();
 
@@ -199,6 +201,7 @@ public class LocaleUtil {
         if (localeInfo == null) {
             return setDefault(null,null);
         }
+
         LocaleInfo old = getDefault();
         setDefaultAndNotify(localeInfo);
         return old;

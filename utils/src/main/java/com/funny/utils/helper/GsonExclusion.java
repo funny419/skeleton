@@ -7,6 +7,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -23,9 +24,7 @@ public class GsonExclusion implements ExclusionStrategy {
         }
 
         if (ArrayUtils.isNotEmpty(filedName)) {
-            for (int i=0,cnt=filedName.length;i<cnt;i++) {
-                exclusionFields.add(filedName[i]);
-            }
+            Collections.addAll(exclusionFields, filedName);
         }
 
         return this;

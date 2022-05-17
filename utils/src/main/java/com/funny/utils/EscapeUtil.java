@@ -9,12 +9,12 @@ import java.util.BitSet;
 
 
 public class EscapeUtil {
-    public static String escapeJava(String str) {
+    public static String escapeJava(String str) throws IOException {
         return escapeJavaStyleString(str,false,false);
     }
 
 
-    public static String escapeJava(String str,boolean strict) {
+    public static String escapeJava(String str,boolean strict) throws IOException {
         return escapeJavaStyleString(str,false,strict);
     }
 
@@ -29,12 +29,12 @@ public class EscapeUtil {
     }
 
 
-    public static String escapeJavaScript(String str) {
+    public static String escapeJavaScript(String str) throws IOException {
         return escapeJavaStyleString(str,true,false);
     }
 
 
-    public static String escapeJavaScript(String str,boolean strict) {
+    public static String escapeJavaScript(String str,boolean strict) throws IOException {
         return escapeJavaStyleString(str,true,strict);
     }
 
@@ -48,21 +48,17 @@ public class EscapeUtil {
         escapeJavaStyleString(str,true,out,strict);
     }
 
-    private static String escapeJavaStyleString(String str,boolean javascript,boolean strict) {
+    private static String escapeJavaStyleString(String str,boolean javascript,boolean strict) throws IOException {
         if (str == null) {
             return null;
         }
 
-        try {
-            StringBuilder out = new StringBuilder(str.length() * 2);
-            if (escapeJavaStyleString(str,javascript,out,strict)) {
-                return out.toString();
-            }
-
-            return str;
-        } catch (IOException e) {
-            return str;
+        StringBuilder out = new StringBuilder(str.length() * 2);
+        if (escapeJavaStyleString(str,javascript,out,strict)) {
+            return out.toString();
         }
+
+        return str;
     }
 
     private static boolean escapeJavaStyleString(String str,boolean javascript,Appendable out,boolean strict) throws IOException {
@@ -165,7 +161,7 @@ public class EscapeUtil {
     }
 
 
-    public static String unescapeJava(String str) {
+    public static String unescapeJava(String str) throws IOException {
         return unescapeJavaStyleString(str);
     }
 
@@ -175,7 +171,7 @@ public class EscapeUtil {
     }
 
 
-    public static String unescapeJavaScript(String str) {
+    public static String unescapeJavaScript(String str) throws IOException {
         return unescapeJavaStyleString(str);
     }
 
@@ -185,22 +181,18 @@ public class EscapeUtil {
     }
 
 
-    private static String unescapeJavaStyleString(String str) {
+    private static String unescapeJavaStyleString(String str) throws IOException {
         if (str == null) {
             return null;
         }
 
-        try {
-            StringBuilder out = new StringBuilder(str.length());
+        StringBuilder out = new StringBuilder(str.length());
 
-            if (unescapeJavaStyleString(str,out)) {
-                return out.toString();
-            }
-
-            return str;
-        } catch (IOException e) {
-            return str;
+        if (unescapeJavaStyleString(str,out)) {
+            return out.toString();
         }
+
+        return str;
     }
 
     private static boolean unescapeJavaStyleString(String str,Appendable out) throws IOException {
@@ -316,7 +308,7 @@ public class EscapeUtil {
     }
 
 
-    public static String escapeHtml(String str) {
+    public static String escapeHtml(String str) throws IOException {
         return escapeEntities(Entities.HTML40_MODIFIED,str);
     }
 
@@ -326,7 +318,7 @@ public class EscapeUtil {
     }
 
 
-    public static String escapeXml(String str) {
+    public static String escapeXml(String str) throws IOException {
         return escapeEntities(Entities.XML,str);
     }
 
@@ -336,22 +328,18 @@ public class EscapeUtil {
     }
 
 
-    public static String escapeEntities(Entities entities,String str) {
+    public static String escapeEntities(Entities entities,String str) throws IOException {
         if (str == null) {
             return null;
         }
 
-        try {
-            StringBuilder out = new StringBuilder(str.length());
+        StringBuilder out = new StringBuilder(str.length());
 
-            if (escapeEntitiesInternal(entities,str,out)) {
-                return out.toString();
-            }
-
-            return str;
-        } catch (IOException e) {
-            return str;
+        if (escapeEntitiesInternal(entities,str,out)) {
+            return out.toString();
         }
+
+        return str;
     }
 
 
@@ -360,7 +348,7 @@ public class EscapeUtil {
     }
 
 
-    public static String unescapeHtml(String str) {
+    public static String unescapeHtml(String str) throws IOException {
         return unescapeEntities(Entities.HTML40,str);
     }
 
@@ -370,7 +358,7 @@ public class EscapeUtil {
     }
 
 
-    public static String unescapeXml(String str) {
+    public static String unescapeXml(String str) throws IOException {
         return unescapeEntities(Entities.XML,str);
     }
 
@@ -380,22 +368,18 @@ public class EscapeUtil {
     }
 
 
-    public static String unescapeEntities(Entities entities,String str) {
+    public static String unescapeEntities(Entities entities,String str) throws IOException {
         if (str == null) {
             return null;
         }
 
-        try {
-            StringBuilder out = new StringBuilder(str.length());
+        StringBuilder out = new StringBuilder(str.length());
 
-            if (unescapeEntitiesInternal(entities,str,out)) {
-                return out.toString();
-            }
-
-            return str;
-        } catch (IOException e) {
-            return str;
+        if (unescapeEntitiesInternal(entities,str,out)) {
+            return out.toString();
         }
+
+        return str;
     }
 
 
@@ -484,7 +468,6 @@ public class EscapeUtil {
 
                     try {
                         int entityValue = Integer.parseInt(str.substring(firstCharIndex,semi),radix);
-
                         out.append((char) entityValue);
                         needToChange = true;
                     } catch (NumberFormatException e) {
@@ -595,22 +578,21 @@ public class EscapeUtil {
         UNRESERVED.or(MARK);
     }
 
-    private static char[] HEXADECIMAL = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E',
-            'F' };
+    private static char[] HEXADECIMAL = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
 
     public static String escapeURL(String str) {
         try {
             return escapeURLInternal(str,null,true);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return str;
         }
     }
 
-    public static String escapeURL(String str,String encoding) throws UnsupportedEncodingException {
+    public static String escapeURL(String str,String encoding) throws Exception {
         return escapeURLInternal(str,encoding,true);
     }
 
-    public static String escapeURL(String str,String encoding,boolean strict) throws UnsupportedEncodingException {
+    public static String escapeURL(String str,String encoding,boolean strict) throws Exception {
         return escapeURLInternal(str,encoding,strict);
     }
 
@@ -622,24 +604,18 @@ public class EscapeUtil {
         escapeURLInternal(str,encoding,out,strict);
     }
 
-    private static String escapeURLInternal(String str,String encoding,boolean strict) throws UnsupportedEncodingException {
+    private static String escapeURLInternal(String str,String encoding,boolean strict) throws Exception {
         if (str == null) {
             return null;
         }
 
-        try {
-            StringBuilder out = new StringBuilder(64);
+        StringBuilder out = new StringBuilder(64);
 
-            if (escapeURLInternal(str,encoding,out,strict)) {
-                return out.toString();
-            }
-
-            return str;
-        } catch (UnsupportedEncodingException e) {
-            throw e;
-        } catch (IOException e) {
-            return str;
+        if (escapeURLInternal(str,encoding,out,strict)) {
+            return out.toString();
         }
+
+        return str;
     }
 
     private static boolean escapeURLInternal(String str,String encoding,Appendable out,boolean strict) throws IOException {
@@ -690,6 +666,7 @@ public class EscapeUtil {
         if (strict) {
             return UNRESERVED.get(ch);
         }
+
         return ch > ' ' && !RESERVED.get(ch) && !Character.isWhitespace((char) ch);
     }
 
@@ -697,13 +674,13 @@ public class EscapeUtil {
     public static String unescapeURL(String str) {
         try {
             return unescapeURLInternal(str,null);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return str;
         }
     }
 
 
-    public static String unescapeURL(String str,String encoding) throws UnsupportedEncodingException {
+    public static String unescapeURL(String str,String encoding) throws Exception {
         return unescapeURLInternal(str,encoding);
     }
 
@@ -712,24 +689,18 @@ public class EscapeUtil {
         unescapeURLInternal(str,encoding,out);
     }
 
-    private static String unescapeURLInternal(String str,String encoding) throws UnsupportedEncodingException {
+    private static String unescapeURLInternal(String str,String encoding) throws Exception {
         if (str == null) {
             return null;
         }
 
-        try {
-            StringBuilder out = new StringBuilder(str.length());
+        StringBuilder out = new StringBuilder(str.length());
 
-            if (unescapeURLInternal(str,encoding,out)) {
-                return out.toString();
-            }
-
-            return str;
-        } catch (UnsupportedEncodingException e) {
-            throw e;
-        } catch (IOException e) {
-            return str;
+        if (unescapeURLInternal(str,encoding,out)) {
+            return out.toString();
         }
+
+        return str;
     }
 
     private static boolean unescapeURLInternal(String str,String encoding,Appendable out) throws IOException {

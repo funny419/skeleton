@@ -222,7 +222,7 @@ public class FileUtil {
     }
 
 
-    public static String fileType(File file) {
+    public static String fileType(File file) throws IOException {
         return FileType.getFileType(file);
     }
 

@@ -34,7 +34,7 @@ public class JVMUtil {
                             .getDeclaredMethod("appendToClassPathForInstrumentation",String.class);
 
             appendToClassPathMethod.setAccessible(true);
-            appendToClassPathMethod.invoke(clsLoader, name);
+            appendToClassPathMethod.invoke(clsLoader,name);
 
             return true;
         }
@@ -49,7 +49,7 @@ public class JVMUtil {
         File manifestFile = null;
         if (metaDir.isDirectory()) {
             for (String m : MANIFESTS) {
-                File mFile = new File(metaDir, m);
+                File mFile = new File(metaDir,m);
                 if (mFile.isFile()) {
                     manifestFile = mFile;
                     break;
@@ -89,7 +89,7 @@ public class JVMUtil {
             return new JarFile(classpathItem).getManifest();
         }
         catch (IOException e) {
-            throw new RuntimeException("JVMUtil.getManifestFromJar Error", e);
+            throw new RuntimeException("JVMUtil.getManifestFromJar Error",e);
         }
         finally {
             InOutStreamHelper.close(fis);
@@ -131,7 +131,7 @@ public class JVMUtil {
                         try {
                             f = f.getCanonicalFile();
                             classpaths.add(f);
-                            addInnerClasspathItems(classpaths, f);
+                            addInnerClasspathItems(classpaths,f);
                         } catch (IOException e) {
                             throw new RuntimeException();
                         }
@@ -149,7 +149,7 @@ public class JVMUtil {
         return classpaths.toArray(new File[classpaths.size()]);
     }
 
-    private static void addInnerClasspathItems(Set<File> classpaths, File item) throws IOException {
+    private static void addInnerClasspathItems(Set<File> classpaths,File item) throws IOException {
 
         Manifest manifest = getManifest(item);
         if (manifest == null) {
@@ -168,9 +168,9 @@ public class JVMUtil {
 
         String base = getClasspathItemBaseDir(item);
 
-        String[] tokens = StringUtils.split(classPaths, ' ');
+        String[] tokens = StringUtils.split(classPaths,' ');
         for (String t : tokens) {
-            File file = new File(base, t);
+            File file = new File(base,t);
             file = file.getCanonicalFile();
 
             if (file.exists()) {
@@ -184,31 +184,28 @@ public class JVMUtil {
     }
 
     public static final class JavaRuntimeInfo {
-
-        private final String SUN_BOOT_CLASS_PATH = getSystemProperty("sun.boot.class.path", false);
-
-        private final String SUN_ARCH_DATA_MODEL = getSystemProperty("sun.arch.data.model", false);
-
-        private final String JAVA_VENDOR_URL = getSystemProperty("java.vendor.url", false);
+        private final String SUN_BOOT_CLASS_PATH = getSystemProperty("sun.boot.class.path",false);
+        private final String SUN_ARCH_DATA_MODEL = getSystemProperty("sun.arch.data.model",false);
+        private final String JAVA_VENDOR_URL = getSystemProperty("java.vendor.url",false);
 
         private JavaRuntimeInfo() {
         }
 
-        public final String getSunBootClassPath() {
+        public String getSunBootClassPath() {
             return SUN_BOOT_CLASS_PATH;
         }
 
-        public final String getSunArchDataModel() {
+        public String getSunArchDataModel() {
             return SUN_ARCH_DATA_MODEL;
         }
 
-        public final String getVendorURL() {
+        public String getVendorURL() {
             return JAVA_VENDOR_URL;
         }
 
     }
 
-    private static String getSystemProperty(String name, boolean quiet) {
+    private static String getSystemProperty(String name,boolean quiet) {
         try {
             return System.getProperty(name);
         }

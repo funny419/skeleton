@@ -5,6 +5,8 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.Collections;
 import java.util.List;
 
 
@@ -18,9 +20,7 @@ public class GsonInclusion implements ExclusionStrategy {
         }
 
         if (ArrayUtils.isNotEmpty(fieldName)) {
-            for (String s : fieldName) {
-                inclusionFields.add(s);
-            }
+            Collections.addAll(inclusionFields, fieldName);
         }
 
         return this;

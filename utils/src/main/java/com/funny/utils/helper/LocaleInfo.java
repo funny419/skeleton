@@ -12,7 +12,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Locale;
 
 
-public final class LocaleInfo implements Cloneable, Externalizable, Serializable {
+public final class LocaleInfo implements Cloneable,Externalizable,Serializable {
     private static final long serialVersionUID = -2961413717509849223L;
     private Locale locale;
     private Charset charset;
@@ -25,14 +25,14 @@ public final class LocaleInfo implements Cloneable, Externalizable, Serializable
         String charsetPart = null;
 
         if (index >= 0) {
-            localePart = name.substring(0, index);
+            localePart = name.substring(0,index);
             charsetPart = name.substring(index + 1);
         }
 
         Locale locale = LocaleUtil.parseLocale(localePart);
         String charset = StringUtils.trimToNull(charsetPart);
 
-        return new LocaleInfo(locale, charset);
+        return new LocaleInfo(locale,charset);
     }
 
     public LocaleInfo() {
@@ -41,14 +41,14 @@ public final class LocaleInfo implements Cloneable, Externalizable, Serializable
     }
 
     public LocaleInfo(Locale locale) {
-        this(locale, null, LocaleUtil.getDefault());
+        this(locale,null,LocaleUtil.getDefault());
     }
 
-    public LocaleInfo(Locale locale, String charset) {
-        this(locale, charset, LocaleUtil.getDefault());
+    public LocaleInfo(Locale locale,String charset) {
+        this(locale,charset,LocaleUtil.getDefault());
     }
 
-    public LocaleInfo(Locale locale, String charset, LocaleInfo fallbackLocaleInfo) {
+    public LocaleInfo(Locale locale,String charset,LocaleInfo fallbackLocaleInfo) {
         Assert.assertNotNull("fallbackLocaleInfo",fallbackLocaleInfo);
         charset = StringUtils.trimToNull(charset);
 

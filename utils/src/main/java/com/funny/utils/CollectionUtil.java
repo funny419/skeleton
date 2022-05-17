@@ -9,9 +9,11 @@ public class CollectionUtil {
         return new ArrayList<E>();
     }
 
+
     public static <E> ArrayList<E> createArrayList(int initialCapacity) {
         return new ArrayList<E>(initialCapacity);
     }
+
 
     public static <E> ArrayList<E> createArrayList(Collection<? extends E> collection) {
         if (collection == null) {
@@ -21,6 +23,7 @@ public class CollectionUtil {
         return new ArrayList<E>(collection);
     }
 
+
     public static <E> ArrayList<E> createArrayList(Iterable<? extends E> iter) {
 
         if (iter instanceof Collection<?>) {
@@ -29,31 +32,32 @@ public class CollectionUtil {
 
         ArrayList<E> list = new ArrayList<E>();
 
-        iterableToCollection(iter, list);
+        iterableToCollection(iter,list);
 
         list.trimToSize();
 
         return list;
     }
 
-    public static <T, V extends T> ArrayList<T> createArrayList(V...args) {
+
+    @SafeVarargs
+    public static <T,V extends T> ArrayList<T> createArrayList(V...args) {
         if (args == null || args.length == 0) {
             return new ArrayList<T>();
         }
 
         ArrayList<T> list = new ArrayList<T>(args.length);
-
-        for (V v : args) {
-            list.add(v);
-        }
+        Collections.addAll(list,args);
 
         return list;
 
     }
 
+
     public static <E> LinkedList<E> createLinkedList() {
         return new LinkedList<E>();
     }
+
 
     public static <E> LinkedList<E> createLinkedList(Collection<? extends E> collection) {
         if (collection == null) {
@@ -63,33 +67,37 @@ public class CollectionUtil {
         return new LinkedList<E>(collection);
     }
 
+
     public static <T> LinkedList<T> createLinkedList(Iterable<? extends T> c) {
         LinkedList<T> list = new LinkedList<T>();
 
-        iterableToCollection(c, list);
+        iterableToCollection(c,list);
 
         return list;
     }
 
-    public static <T, V extends T> LinkedList<T> createLinkedList(V...args) {
+
+    @SafeVarargs
+    public static <T,V extends T> LinkedList<T> createLinkedList(V...args) {
         LinkedList<T> list = new LinkedList<T>();
 
         if (args != null) {
-            for (V v : args) {
-                list.add(v);
-            }
+            Collections.addAll(list,args);
         }
 
         return list;
     }
 
+
     public static <E> HashSet<E> createHashSet() {
         return new HashSet<E>();
     }
 
+
     public static <E> HashSet<E> createHashSet(int initialCapacity) {
         return new HashSet<E>(initialCapacity);
     }
+
 
     public static <E> HashSet<E> createHashSet(Collection<? extends E> collection) {
         if (collection == null) {
@@ -98,18 +106,19 @@ public class CollectionUtil {
         return new HashSet<E>(collection);
     }
 
-    public static <E, O extends E> HashSet<E> createHashSet(O...args) {
+
+    @SafeVarargs
+    public static <E,O extends E> HashSet<E> createHashSet(O...args) {
         if (args == null || args.length == 0) {
             return new HashSet<E>();
         }
 
         HashSet<E> set = new HashSet<E>(args.length);
-        for (O o : args) {
-            set.add(o);
-        }
+        Collections.addAll(set,args);
 
         return set;
     }
+
 
     public static <T> HashSet<T> createHashSet(Iterable<? extends T> iter) {
         HashSet<T> set;
@@ -118,28 +127,29 @@ public class CollectionUtil {
             set = new HashSet<T>((Collection<? extends T>) iter);
         } else {
             set = new HashSet<T>();
-            iterableToCollection(iter, set);
+            iterableToCollection(iter,set);
         }
 
         return set;
     }
+
 
     public static <E> LinkedHashSet<E> createLinkedHashSet() {
         return new LinkedHashSet<E>();
     }
 
-    public static <T, V extends T> LinkedHashSet<T> createLinkedHashSet(V...args) {
+
+    @SafeVarargs
+    public static <T,V extends T> LinkedHashSet<T> createLinkedHashSet(V...args) {
         if (args == null || args.length == 0) {
             return new LinkedHashSet<T>();
         }
+
         LinkedHashSet<T> set = new LinkedHashSet<T>(args.length);
-
-        for (V v : args) {
-            set.add(v);
-        }
-
+        Collections.addAll(set,args);
         return set;
     }
+
 
     public static <T> LinkedHashSet<T> createLinkedHashSet(Iterable<? extends T> iter) {
         LinkedHashSet<T> set;
@@ -148,43 +158,49 @@ public class CollectionUtil {
             set = new LinkedHashSet<T>((Collection<? extends T>) iter);
         } else {
             set = new LinkedHashSet<T>();
-            iterableToCollection(iter, set);
+            iterableToCollection(iter,set);
         }
 
         return set;
     }
 
-    public static <T, V extends T> TreeSet<T> createTreeSet(V...args) {
-        return (TreeSet<T>) createTreeSet(null, args);
+
+    @SafeVarargs
+    public static <T,V extends T> TreeSet<T> createTreeSet(V...args) {
+        return (TreeSet<T>) createTreeSet(null,args);
     }
 
+
     public static <T> TreeSet<T> createTreeSet(Iterable<? extends T> c) {
-        return createTreeSet(null, c);
+        return createTreeSet(null,c);
     }
+
 
     public static <T> TreeSet<T> createTreeSet(Comparator<? super T> comparator) {
         return new TreeSet<T>(comparator);
     }
 
-    public static <T, V extends T> TreeSet<T> createTreeSet(Comparator<? super T> comparator, V...args) {
+
+    @SafeVarargs
+    public static <T,V extends T> TreeSet<T> createTreeSet(Comparator<? super T> comparator,V...args) {
         TreeSet<T> set = new TreeSet<T>(comparator);
 
         if (args != null) {
-            for (V v : args) {
-                set.add(v);
-            }
+            Collections.addAll(set,args);
         }
 
         return set;
     }
 
-    public static <T> TreeSet<T> createTreeSet(Comparator<? super T> comparator, Iterable<? extends T> c) {
+
+    public static <T> TreeSet<T> createTreeSet(Comparator<? super T> comparator,Iterable<? extends T> c) {
         TreeSet<T> set = new TreeSet<T>(comparator);
 
-        iterableToCollection(c, set);
+        iterableToCollection(c,set);
 
         return set;
     }
+
 
     public static <E> TreeSet<E> createTreeSet(SortedSet<E> set) {
         if (set == null) {
@@ -194,67 +210,81 @@ public class CollectionUtil {
         return new TreeSet<E>(set);
     }
 
-    public static <K, V> HashMap<K, V> createHashMap() {
-        return new HashMap<K, V>();
+
+    public static <K,V> HashMap<K,V> createHashMap() {
+        return new HashMap<K,V>();
     }
 
-    public static <K, V> HashMap<K, V> createHashMap(int initialCapacity) {
-        return new HashMap<K, V>(initialCapacity);
+
+    public static <K,V> HashMap<K,V> createHashMap(int initialCapacity) {
+        return new HashMap<K,V>(initialCapacity);
     }
 
-    public static <K, V> HashMap<K, V> createHashMap(int initialCapacity, float loadFactor) {
-        return new HashMap<K, V>(initialCapacity, loadFactor);
+
+    public static <K,V> HashMap<K,V> createHashMap(int initialCapacity,float loadFactor) {
+        return new HashMap<K,V>(initialCapacity,loadFactor);
     }
 
-    public static <K, V> HashMap<K, V> synchronizedMap() {
-        return (HashMap<K, V>) Collections.synchronizedMap(new HashMap<K, V>());
+
+    public static <K,V> HashMap<K,V> synchronizedMap() {
+        return (HashMap<K,V>) Collections.synchronizedMap(new HashMap<K,V>());
     }
 
-    public static <K, V> HashMap<K, V> createHashMap(Map<? extends K, ? extends V> map) {
-        return new HashMap<K, V>(map);
+
+    public static <K,V> HashMap<K,V> createHashMap(Map<? extends K,? extends V> map) {
+        return new HashMap<K,V>(map);
     }
 
-    public static <K, V> LinkedHashMap<K, V> createLinkedHashMap() {
-        return new LinkedHashMap<K, V>();
+
+    public static <K,V> LinkedHashMap<K,V> createLinkedHashMap() {
+        return new LinkedHashMap<K,V>();
     }
 
-    public static <K, V> LinkedHashMap<K, V> createLinkedHashMap(int initialCapacity) {
-        return new LinkedHashMap<K, V>(initialCapacity);
+
+    public static <K,V> LinkedHashMap<K,V> createLinkedHashMap(int initialCapacity) {
+        return new LinkedHashMap<K,V>(initialCapacity);
     }
 
-    public static <K, V> LinkedHashMap<K, V> createLinkedHashMap(int initialCapacity, float loadFactor) {
-        return new LinkedHashMap<K, V>(initialCapacity, loadFactor);
+
+    public static <K,V> LinkedHashMap<K,V> createLinkedHashMap(int initialCapacity,float loadFactor) {
+        return new LinkedHashMap<K,V>(initialCapacity,loadFactor);
     }
 
-    public static <K, V> LinkedHashMap<K, V> createLinkedHashMap(Map<? extends K, ? extends V> map) {
+
+    public static <K,V> LinkedHashMap<K,V> createLinkedHashMap(Map<? extends K,? extends V> map) {
         if (map == null) {
-            return new LinkedHashMap<K, V>();
+            return new LinkedHashMap<K,V>();
         }
 
-        return new LinkedHashMap<K, V>(map);
+        return new LinkedHashMap<K,V>(map);
     }
 
-    public static <K, V> ConcurrentMap<K, V> createConcurrentMap() {
-        return new ConcurrentHashMap<K, V>();
+
+    public static <K,V> ConcurrentMap<K,V> createConcurrentMap() {
+        return new ConcurrentHashMap<K,V>();
     }
 
-    public static <K, V> ConcurrentMap<K, V> createConcurrentMap(Map<? extends K, ? extends V> map) {
+
+    public static <K,V> ConcurrentMap<K,V> createConcurrentMap(Map<? extends K,? extends V> map) {
         if (map == null) {
             return null;
         }
 
-        return new ConcurrentHashMap<K, V>(map);
+        return new ConcurrentHashMap<K,V>(map);
     }
 
-    public static <K, V> ConcurrentMap<K, V> createConcurrentMap(int initialCapacity) {
-        return new ConcurrentHashMap<K, V>(initialCapacity);
+
+    public static <K,V> ConcurrentMap<K,V> createConcurrentMap(int initialCapacity) {
+        return new ConcurrentHashMap<K,V>(initialCapacity);
     }
 
-    public static <K, V> ConcurrentMap<K, V> createConcurrentMap(int initialCapacity, float loadFactor) {
-        return new ConcurrentHashMap<K, V>(initialCapacity, loadFactor);
+
+    public static <K,V> ConcurrentMap<K,V> createConcurrentMap(int initialCapacity,float loadFactor) {
+        return new ConcurrentHashMap<K,V>(initialCapacity,loadFactor);
     }
 
-    private static <E> void iterableToCollection(Iterable<? extends E> iter, Collection<E> list) {
+
+    private static <E> void iterableToCollection(Iterable<? extends E> iter,Collection<E> list) {
         if (iter == null) {
             return;
         }
@@ -264,6 +294,7 @@ public class CollectionUtil {
         }
     }
 
+
     public static <E extends Enum<E>> EnumSet<E> createEnumSet(Collection<E> c) {
         if (c == null) {
             return null;
@@ -271,6 +302,7 @@ public class CollectionUtil {
 
         return EnumSet.copyOf(c);
     }
+
 
     public static <E extends Enum<E>> EnumSet<E> createEnumSet(Class<E> elementType) {
         if (elementType == null) {
@@ -280,93 +312,109 @@ public class CollectionUtil {
         return EnumSet.allOf(elementType);
     }
 
-    public static <K, V> TreeMap<K, V> createTreeMap() {
-        return new TreeMap<K, V>();
+
+    public static <K,V> TreeMap<K,V> createTreeMap() {
+        return new TreeMap<K,V>();
     }
 
-    public static <K, V> TreeMap<K, V> createTreeMap(Comparator<? super K> comparator) {
+
+    public static <K,V> TreeMap<K,V> createTreeMap(Comparator<? super K> comparator) {
         if (comparator == null) {
             return null;
         }
 
-        return new TreeMap<K, V>(comparator);
+        return new TreeMap<K,V>(comparator);
     }
 
-    public static <K, V> TreeMap<K, V> createTreeMap(Map<? extends K, ? extends V> map) {
+
+    public static <K,V> TreeMap<K,V> createTreeMap(Map<? extends K,? extends V> map) {
         if (map == null) {
             return null;
         }
 
-        return new TreeMap<K, V>(map);
+        return new TreeMap<K,V>(map);
     }
 
-    public static <K, V> TreeMap<K, V> createTreeMap(SortedMap<K, ? extends V> map) {
+
+    public static <K,V> TreeMap<K,V> createTreeMap(SortedMap<K,? extends V> map) {
         if (map == null) {
             return null;
         }
 
-        return new TreeMap<K, V>(map);
+        return new TreeMap<K,V>(map);
     }
 
-    public static <K, V> WeakHashMap<K, V> createWeakHashMap() {
-        return new WeakHashMap<K, V>();
+
+    public static <K,V> WeakHashMap<K,V> createWeakHashMap() {
+        return new WeakHashMap<K,V>();
     }
 
-    public static <K, V> WeakHashMap<K, V> createWeakHashMap(int initialCapacity) {
-        return new WeakHashMap<K, V>(initialCapacity);
+
+    public static <K,V> WeakHashMap<K,V> createWeakHashMap(int initialCapacity) {
+        return new WeakHashMap<K,V>(initialCapacity);
     }
 
-    public static <K, V> WeakHashMap<K, V> createWeakHashMap(Map<? extends K, ? extends V> map) {
+
+    public static <K,V> WeakHashMap<K,V> createWeakHashMap(Map<? extends K,? extends V> map) {
         if (map == null) {
-            return new WeakHashMap<K, V>();
+            return new WeakHashMap<K,V>();
         }
 
-        return new WeakHashMap<K, V>(map);
+        return new WeakHashMap<K,V>(map);
     }
 
-    public static <K, V> WeakHashMap<K, V> createWeakHashMap(int initialCapacity, float loadFactor) {
-        return new WeakHashMap<K, V>(initialCapacity, loadFactor);
+
+    public static <K,V> WeakHashMap<K,V> createWeakHashMap(int initialCapacity,float loadFactor) {
+        return new WeakHashMap<K,V>(initialCapacity,loadFactor);
     }
 
-    public static <K, V> IdentityHashMap<K, V> createIdentityHashMap() {
-        return new IdentityHashMap<K, V>();
+
+    public static <K,V> IdentityHashMap<K,V> createIdentityHashMap() {
+        return new IdentityHashMap<K,V>();
     }
 
-    public static <K, V> IdentityHashMap<K, V> createIdentityHashMap(int initialCapacity) {
-        return new IdentityHashMap<K, V>(initialCapacity);
+
+    public static <K,V> IdentityHashMap<K,V> createIdentityHashMap(int initialCapacity) {
+        return new IdentityHashMap<K,V>(initialCapacity);
     }
 
-    public static <K, V> IdentityHashMap<K, V> createIdentityHashMap(Map<? extends K, ? extends V> map) {
+
+    public static <K,V> IdentityHashMap<K,V> createIdentityHashMap(Map<? extends K,? extends V> map) {
         if (map == null) {
             return null;
         }
 
-        return new IdentityHashMap<K, V>(map);
+        return new IdentityHashMap<K,V>(map);
     }
 
-    public static <K extends Enum<K>, V> EnumMap<K, V> createEnumMap(Class<K> keyType) {
+
+    public static <K extends Enum<K>,V> EnumMap<K,V> createEnumMap(Class<K> keyType) {
         if (keyType == null) {
             return null;
         }
 
-        return new EnumMap<K, V>(keyType);
+        return new EnumMap<K,V>(keyType);
     }
 
-    public static <K extends Enum<K>, V> EnumMap<K, V> createEnumMap(Map<K, ? extends V> map) {
+
+    public static <K extends Enum<K>,V> EnumMap<K,V> createEnumMap(Map<K,? extends V> map) {
         if (map == null) {
             return null;
         }
 
-        return new EnumMap<K, V>(map);
+        return new EnumMap<K,V>(map);
     }
+
 
     public static <E> PriorityQueue<E> createPriorityQueue() {
         return new PriorityQueue<E>();
     }
 
+
     public static <E> PriorityQueue<E> createPriorityQueue(int initialCapacity) {
         return new PriorityQueue<E>(initialCapacity);
     }
+
 
     public static <E> PriorityQueue<E> createPriorityQueue(Collection<? extends E> collection) {
         if (collection == null) {
@@ -376,13 +424,15 @@ public class CollectionUtil {
         return new PriorityQueue<E>(collection);
     }
 
-    public static <E> PriorityQueue<E> createPriorityQueue(int initialCapacity, Comparator<? super E> comparator) {
+
+    public static <E> PriorityQueue<E> createPriorityQueue(int initialCapacity,Comparator<? super E> comparator) {
         if (comparator == null) {
             return new PriorityQueue<E>(initialCapacity);
         }
 
-        return new PriorityQueue<E>(initialCapacity, comparator);
+        return new PriorityQueue<E>(initialCapacity,comparator);
     }
+
 
     public static <E> PriorityQueue<E> createPriorityQueue(PriorityQueue<? extends E> queue) {
         if (queue == null) {
@@ -392,6 +442,7 @@ public class CollectionUtil {
         return new PriorityQueue<E>(queue);
     }
 
+
     public static <E> PriorityQueue<E> createPriorityQueue(SortedSet<? extends E> set) {
         if (set == null) {
             return null;
@@ -400,9 +451,11 @@ public class CollectionUtil {
         return new PriorityQueue<E>(set);
     }
 
+
     public static <E> ArrayDeque<E> createArrayDeque() {
         return new ArrayDeque<E>();
     }
+
 
     public static <E> ArrayDeque<E> createArrayDeque(Collection<? extends E> collection) {
         if (collection == null) {
@@ -412,50 +465,58 @@ public class CollectionUtil {
         return new ArrayDeque<E>(collection);
     }
 
+
     public static <E> ArrayDeque<E> createArrayDeque(int initialCapacity) {
         return new ArrayDeque<E>(initialCapacity);
     }
+
 
     public static <E> BitSet createBitSet() {
         return new BitSet();
     }
 
+
     public static <E> BitSet createBitSet(int initialCapacity) {
         return new BitSet();
     }
 
-    public static <K, V> ConcurrentSkipListMap<K, V> createConcurrentSkipListMap() {
-        return new ConcurrentSkipListMap<K, V>();
+
+    public static <K,V> ConcurrentSkipListMap<K,V> createConcurrentSkipListMap() {
+        return new ConcurrentSkipListMap<K,V>();
     }
 
-    public static <K, V> ConcurrentSkipListMap<K, V> createConcurrentSkipListMap(Comparator<? super K> comparator) {
+
+    public static <K,V> ConcurrentSkipListMap<K,V> createConcurrentSkipListMap(Comparator<? super K> comparator) {
         if (comparator == null) {
-            return new ConcurrentSkipListMap<K, V>();
+            return new ConcurrentSkipListMap<K,V>();
         }
 
-        return new ConcurrentSkipListMap<K, V>(comparator);
+        return new ConcurrentSkipListMap<K,V>(comparator);
     }
 
-    public static <K, V> ConcurrentSkipListMap<K, V> createConcurrentSkipListMap(Map<? extends K, ? extends V> map) {
+
+    public static <K,V> ConcurrentSkipListMap<K,V> createConcurrentSkipListMap(Map<? extends K,? extends V> map) {
         if (map == null) {
-            return new ConcurrentSkipListMap<K, V>();
+            return new ConcurrentSkipListMap<K,V>();
         }
 
-        return new ConcurrentSkipListMap<K, V>(map);
+        return new ConcurrentSkipListMap<K,V>(map);
     }
 
-    public static <K, V> ConcurrentSkipListMap<K, V> createConcurrentSkipListMap(SortedMap<? extends K, ? extends V> map) {
+
+    public static <K,V> ConcurrentSkipListMap<K,V> createConcurrentSkipListMap(SortedMap<? extends K,? extends V> map) {
         if (map == null) {
-            return new ConcurrentSkipListMap<K, V>();
+            return new ConcurrentSkipListMap<K,V>();
         }
 
-        return new ConcurrentSkipListMap<K, V>(map);
+        return new ConcurrentSkipListMap<K,V>(map);
     }
 
 
     public static <E> Queue<E> createConcurrentLinkedQueue() {
         return new ConcurrentLinkedQueue<E>();
     }
+
 
     public static <E> Queue<E> createConcurrentLinkedQueue(Collection<? extends E> collection) {
         if (collection == null) {
@@ -465,9 +526,11 @@ public class CollectionUtil {
         return new ConcurrentLinkedQueue<E>(collection);
     }
 
+
     public static <E> CopyOnWriteArrayList<E> createCopyOnWriteArrayList() {
         return new CopyOnWriteArrayList<E>();
     }
+
 
     public static <E> CopyOnWriteArrayList<E> createCopyOnWriteArrayList(Collection<? extends E> collection) {
         if (collection == null) {
@@ -477,6 +540,7 @@ public class CollectionUtil {
         return new CopyOnWriteArrayList<E>();
     }
 
+
     public static <E> CopyOnWriteArrayList<E> createCopyOnWriteArrayList(E[] toCopyIn) {
         if (toCopyIn == null) {
             return new CopyOnWriteArrayList<E>();
@@ -485,21 +549,26 @@ public class CollectionUtil {
         return new CopyOnWriteArrayList<E>(toCopyIn);
     }
 
+
     public static <E> CopyOnWriteArraySet<E> createCopyOnWriteArraySet() {
         return new CopyOnWriteArraySet<E>();
     }
+
 
     public static <E> CopyOnWriteArraySet<E> createCopyOnWriteArraySet(Collection<? extends E> collection) {
         return new CopyOnWriteArraySet<E>();
     }
 
+
     public static <E> BlockingQueue<E> createLinkedBlockingQueue() {
         return new LinkedBlockingQueue<E>();
     }
 
+
     public static <E> BlockingQueue<E> createLinkedBlockingQueue(int capacity) {
         return new LinkedBlockingQueue<E>(capacity);
     }
+
 
     public static <E> BlockingQueue<E> createLinkedBlockingQueue(Collection<? extends E> collection) {
         if (collection == null) {
@@ -541,8 +610,7 @@ public class CollectionUtil {
     }
 
 
-    private static final class EnumIterator<T> implements Iterator<T>, Iterable<T> {
-
+    private static final class EnumIterator<T> implements Iterator<T>,Iterable<T> {
         private final Enumeration<T> enumeration;
 
         public EnumIterator(Enumeration<T> enumeration) {
@@ -572,7 +640,6 @@ public class CollectionUtil {
 
 
     private static final class ReverseArrayIterator<T> implements Iterator<T> {
-
         private final T[] items;
         private int ix;
 

@@ -2,6 +2,7 @@ package com.funny.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -73,16 +74,6 @@ public class SystemUtil {
         public final String getVendor() {
             return JAVA_VM_SPECIFICATION_VENDOR;
         }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-
-            append(builder,"JavaVM Spec. Name:    ",getName());
-            append(builder,"JavaVM Spec. Version: ",getVersion());
-            append(builder,"JavaVM Spec. Vendor:  ",getVendor());
-
-            return builder.toString();
-        }
     }
 
 
@@ -112,15 +103,6 @@ public class SystemUtil {
         public final String getInfo() {
             return JAVA_VM_INFO;
         }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-            append(builder,"JavaVM Name:    ",getName());
-            append(builder,"JavaVM Version: ",getVersion());
-            append(builder,"JavaVM Vendor:  ",getVendor());
-            append(builder,"JavaVM Info:    ",getInfo());
-            return builder.toString();
-        }
     }
 
 
@@ -144,16 +126,6 @@ public class SystemUtil {
 
         public final String getVendor() {
             return JAVA_SPECIFICATION_VENDOR;
-        }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-
-            append(builder,"Java Spec. Name:    ",getName());
-            append(builder,"Java Spec. Version: ",getVersion());
-            append(builder,"Java Spec. Vendor:  ",getVendor());
-
-            return builder.toString();
         }
     }
 
@@ -194,7 +166,7 @@ public class SystemUtil {
             return JAVA_VERSION_INT;
         }
 
-        private final float getJavaVersionAsFloat() {
+        private float getJavaVersionAsFloat() {
             if (JAVA_VERSION == null) {
                 return 0f;
             }
@@ -208,7 +180,7 @@ public class SystemUtil {
             return Float.parseFloat(str);
         }
 
-        private final int getJavaVersionAsInt() {
+        private int getJavaVersionAsInt() {
             if (JAVA_VERSION == null) {
                 return 0;
             }
@@ -293,14 +265,6 @@ public class SystemUtil {
         public final boolean isJavaVersionAtLeast(int requiredVersion) {
             return getVersionInt() >= requiredVersion;
         }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-            append(builder,"Java Version:    ",getVersion());
-            append(builder,"Java Vendor:     ",getVendor());
-            append(builder,"Java Vendor URL: ",getVendorURL());
-            return builder.toString();
-        }
     }
 
 
@@ -321,70 +285,56 @@ public class SystemUtil {
         private JavaRuntimeInfo() {
         }
 
-        public final String getSunBoothClassPath() {
+        public String getSunBoothClassPath() {
             return SUN_BOOT_CLASS_PATH;
         }
 
-        public final String getSunArchDataModel() {
+        public String getSunArchDataModel() {
             return SUN_ARCH_DATA_MODEL;
         }
 
-        public final String getName() {
+        public String getName() {
             return JAVA_RUNTIME_NAME;
         }
 
-        public final String getVersion() {
+        public String getVersion() {
             return JAVA_RUNTIME_VERSION;
         }
 
-        public final String getHomeDir() {
+        public String getHomeDir() {
             return JAVA_HOME;
         }
 
-        public final String getExtDirs() {
+        public String getExtDirs() {
             return JAVA_EXT_DIRS;
         }
 
-        public final String getEndorsedDirs() {
+        public String getEndorsedDirs() {
             return JAVA_ENDORSED_DIRS;
         }
 
-        public final String getClassPath() {
+        public String getClassPath() {
             return JAVA_CLASS_PATH;
         }
 
-        public final String[] getClassPathArray() {
+        public String[] getClassPathArray() {
             return StringUtils.split(getClassPath(),getOsInfo().getPathSeparator());
         }
 
-        public final String getClassVersion() {
+        public String getClassVersion() {
             return JAVA_CLASS_VERSION;
         }
 
-        public final String getLibraryPath() {
+        public String getLibraryPath() {
             return JAVA_LIBRARY_PATH;
         }
 
-        public final String[] getLibraryPathArray() {
+        public String[] getLibraryPathArray() {
             return StringUtils.split(getLibraryPath(),getOsInfo().getPathSeparator());
         }
 
-        public final String getProtocolPackages() {
+        public String getProtocolPackages() {
             return getSystemProperty("java.protocol.handler.pkgs",true);
-        }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-            append(builder,"Java Runtime Name:      ",getName());
-            append(builder,"Java Runtime Version:   ",getVersion());
-            append(builder,"Java Home Dir:          ",getHomeDir());
-            append(builder,"Java Extension Dirs:    ",getExtDirs());
-            append(builder,"Java Endorsed Dirs:     ",getEndorsedDirs());
-            append(builder,"Java Class Path:        ",getClassPath());
-            append(builder,"Java Class Version:     ",getClassVersion());
-            append(builder,"Java Library Path:      ",getLibraryPath());
-            append(builder,"Java Protocol Packages: ",getProtocolPackages());
-            return builder.toString();
         }
     }
 
@@ -420,79 +370,79 @@ public class SystemUtil {
         private OsInfo() {
         }
 
-        public final String getArch() {
+        public String getArch() {
             return OS_ARCH;
         }
 
-        public final String getName() {
+        public String getName() {
             return OS_NAME;
         }
 
-        public final String getVersion() {
+        public String getVersion() {
             return OS_VERSION;
         }
 
-        public final boolean isAix() {
+        public boolean isAix() {
             return IS_OS_AIX;
         }
 
-        public final boolean isHpUx() {
+        public boolean isHpUx() {
             return IS_OS_HP_UX;
         }
 
-        public final boolean isIrix() {
+        public boolean isIrix() {
             return IS_OS_IRIX;
         }
 
-        public final boolean isLinux() {
+        public boolean isLinux() {
             return IS_OS_LINUX;
         }
 
-        public final boolean isMac() {
+        public boolean isMac() {
             return IS_OS_MAC;
         }
 
-        public final boolean isMacOsX() {
+        public boolean isMacOsX() {
             return IS_OS_MAC_OSX;
         }
 
-        public final boolean isOs2() {
+        public boolean isOs2() {
             return IS_OS_OS2;
         }
 
-        public final boolean isSolaris() {
+        public boolean isSolaris() {
             return IS_OS_SOLARIS;
         }
 
-        public final boolean isSunOS() {
+        public boolean isSunOS() {
             return IS_OS_SUN_OS;
         }
 
-        public final boolean isWindows() {
+        public boolean isWindows() {
             return IS_OS_WINDOWS;
         }
 
-        public final boolean isWindows2000() {
+        public boolean isWindows2000() {
             return IS_OS_WINDOWS_2000;
         }
 
-        public final boolean isWindows95() {
+        public boolean isWindows95() {
             return IS_OS_WINDOWS_95;
         }
 
-        public final boolean isWindows98() {
+        public boolean isWindows98() {
             return IS_OS_WINDOWS_98;
         }
 
-        public final boolean isWindowsME() {
+        public boolean isWindowsME() {
             return IS_OS_WINDOWS_ME;
         }
 
-        public final boolean isWindowsNT() {
+        public boolean isWindowsNT() {
             return IS_OS_WINDOWS_NT;
         }
 
-        public final boolean isWindowsXP() {
+        public boolean isWindowsXP() {
             return IS_OS_WINDOWS_XP;
         }
 
@@ -512,32 +462,20 @@ public class SystemUtil {
             return OS_NAME.startsWith(osNamePrefix) && OS_VERSION.startsWith(osVersionPrefix);
         }
 
-        public final String getFileEncoding() {
+        public String getFileEncoding() {
             return FILE_ENCODING;
         }
 
-        public final String getFileSeparator() {
+        public String getFileSeparator() {
             return FILE_SEPARATOR;
         }
 
-        public final String getLineSeparator() {
+        public String getLineSeparator() {
             return LINE_SEPARATOR;
         }
 
-        public final String getPathSeparator() {
+        public String getPathSeparator() {
             return PATH_SEPARATOR;
-        }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-            append(builder,"OS Arch:        ",getArch());
-            append(builder,"OS Name:        ",getName());
-            append(builder,"OS Version:     ",getVersion());
-            append(builder,"File Encoding:  ",getFileEncoding());
-            append(builder,"File Separator: ",getFileSeparator());
-            append(builder,"Line Separator: ",getLineSeparator());
-            append(builder,"Path Separator: ",getPathSeparator());
-            return builder.toString();
         }
     }
 
@@ -555,39 +493,28 @@ public class SystemUtil {
         private UserInfo() {
         }
 
-        public final String getName() {
+        public String getName() {
             return USER_NAME;
         }
 
-        public final String getHomeDir() {
+        public String getHomeDir() {
             return USER_HOME;
         }
 
-        public final String getCurrentDir() {
+        public String getCurrentDir() {
             return USER_DIR;
         }
 
-        public final String getTempDir() {
+        public String getTempDir() {
             return JAVA_IO_TMPDIR;
         }
 
-        public final String getLanguage() {
+        public String getLanguage() {
             return USER_LANGUAGE;
         }
 
-        public final String getCountry() {
+        public String getCountry() {
             return USER_COUNTRY;
-        }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-            append(builder,"User Name:        ",getName());
-            append(builder,"User Home Dir:    ",getHomeDir());
-            append(builder,"User Current Dir: ",getCurrentDir());
-            append(builder,"User Temp Dir:    ",getTempDir());
-            append(builder,"User Language:    ",getLanguage());
-            append(builder,"User Country:     ",getCountry());
-            return builder.toString();
         }
     }
 
@@ -616,27 +543,20 @@ public class SystemUtil {
             HOST_ADDRESS = hostAddress;
         }
 
-        public final String getName() {
+        public String getName() {
             return HOST_NAME;
         }
 
-        public final String getAddress() {
+        public String getAddress() {
             return HOST_ADDRESS;
-        }
-
-        public final String toString() {
-            StringBuilder builder = new StringBuilder();
-            append(builder,"Host Name:    ",getName());
-            append(builder,"Host Address: ",getAddress());
-            return builder.toString();
         }
     }
 
-    public static final void dumpSystemInfo() {
+    public static void dumpSystemInfo() {
         dumpSystemInfo(new PrintWriter(System.out));
     }
 
-    public static final void dumpSystemInfo(PrintWriter out) {
+    public static void dumpSystemInfo(PrintWriter out) {
         out.println("--------------");
         out.println(getJvmSpecInfo());
         out.println("--------------");
@@ -670,11 +590,6 @@ public class SystemUtil {
         }
     }
 
-    private static void append(StringBuilder builder,String caption,String value) {
-        builder.append(caption)
-                .append(StringUtils.defaultIfBlank(EscapeUtil.escapeJava(value),"[n/a]"))
-                .append("\n");
-    }
 
     public static String getExternalVariable(String var) {
         String value = System.getProperty(var);

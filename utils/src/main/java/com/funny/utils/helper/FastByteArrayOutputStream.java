@@ -18,8 +18,8 @@ public class FastByteArrayOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte[] b, int off, int len) {
-        buffer.append(b, off, len);
+    public void write(byte[] b,int off,int len) {
+        buffer.append(b,off,len);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FastByteArrayOutputStream extends OutputStream {
             byte[] buf = buffer.array(i);
             out.write(buf);
         }
-        out.write(buffer.array(index), 0, buffer.offset());
+        out.write(buffer.array(index),0,buffer.offset());
     }
 
     public byte[] toByteArray() {
@@ -59,6 +59,6 @@ public class FastByteArrayOutputStream extends OutputStream {
     }
 
     public String toString(String enc) throws UnsupportedEncodingException {
-        return new String(toByteArray(), enc);
+        return new String(toByteArray(),enc);
     }
 }

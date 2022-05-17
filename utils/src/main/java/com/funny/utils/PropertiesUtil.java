@@ -1,6 +1,5 @@
 package com.funny.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -8,7 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 
 
-@Slf4j
 public class PropertiesUtil {
     public static String key(String key) {
         return System.getProperty(key);
@@ -23,7 +21,6 @@ public class PropertiesUtil {
             return properties.getProperty(key);
         }
         catch (Exception e) {
-            log.error("getValueByKey error : " + e.getMessage());
             return null;
         }
     }
@@ -45,7 +42,6 @@ public class PropertiesUtil {
             return map;
         }
         catch (Exception e) {
-            log.error("load properties error : " + e.getMessage());
             return null;
         }
     }
@@ -56,9 +52,7 @@ public class PropertiesUtil {
             InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath));
             return properties(inputStream);
         } catch (Exception e) {
-            log.error("getAllProperties error : " + e.getMessage());
+            return new HashMap<>();
         }
-
-        return new HashMap<>();
     }
 }

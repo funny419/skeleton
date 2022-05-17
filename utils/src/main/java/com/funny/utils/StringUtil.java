@@ -1,10 +1,7 @@
 package com.funny.utils;
 
-import com.funny.utils.constants.PatternConstants;
 import com.funny.utils.helper.RegHelper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -16,7 +13,6 @@ import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 
-@Slf4j
 public class StringUtil {
     public static final String NO_BREAK_SPACE = "(\r\n|\r|\n|\n\r)";
 
@@ -51,11 +47,14 @@ public class StringUtil {
     }
 
 
-    public static String[] parseStringByBytes(String raw, int len, String encoding) {
-        if (raw == null) return new String[0];
+    public static String[] parseStringByBytes(String raw,int len,String encoding) {
+        if (StringUtils.isEmpty(raw)) {
+            return new String[0];
+        }
+
         String[] ary = null;
+
         try {
-            // raw 의 byte
             byte[] rawBytes = raw.getBytes(encoding);
             int rawLength = rawBytes.length;
 
@@ -83,7 +82,7 @@ public class StringUtil {
                     if (minusByteNum % hangulByteNum != 0) {
                         offset -= minusByteNum % hangulByteNum;
                     }
-                    ary[i] = new String(rawBytes, index, offset, encoding);
+                    ary[i] = new String(rawBytes,index,offset,encoding);
                     index += offset;
 
                 }
@@ -96,7 +95,7 @@ public class StringUtil {
         return ary;
     }
 
-    public static String cut(String s, int n) {
+    public static String cut(String s,int n) {
         byte[] utf8 = s.getBytes();
         if (utf8.length < n) n = utf8.length;
         int n16 = 0;
@@ -115,11 +114,11 @@ public class StringUtil {
             }
         }
 
-        return s.substring(0, n16);
+        return s.substring(0,n16);
     }
 
 
-    public static String stringCut(String sourceText, String startKeyword, int cutLength, int startKewordPreviousLength, boolean isTag, boolean isDot) {
+    public static String stringCut(String sourceText,String startKeyword,int cutLength,int startKewordPreviousLength,boolean isTag,boolean isDot) {
         String targetText = sourceText;
         int oF = 0;
         int oL = 0;
@@ -127,21 +126,21 @@ public class StringUtil {
         int rL = 0;
         int nLengthPrev = 0;
 
-        Pattern p = Pattern.compile("<(/?)([^<>]*)?>", Pattern.CASE_INSENSITIVE);
+        Pattern p = RegHelper.CASE_INSENSITIVE_PATTERN;
 
         if (isTag) {
             targetText = p.matcher(targetText).replaceAll("");
         }
 
-        targetText = targetText.replace("&amp;", "&");
-        targetText = targetText.replaceAll("(!/|\r|\n|&nbsp;)", "");
+        targetText = targetText.replace("&amp;","&");
+        targetText = targetText.replaceAll("(!/|\r|\n|&nbsp;)","");
 
         try {
             byte[] bytes = targetText.getBytes(StandardCharsets.UTF_8);
             if (startKeyword != null && !startKeyword.equals("")) {
                 nLengthPrev = !targetText.contains(startKeyword) ? 0 : targetText.indexOf(startKeyword); // 일단 위치찾고
-                nLengthPrev = targetText.substring(0, nLengthPrev).getBytes("MS949").length;
-                nLengthPrev = Math.max(nLengthPrev - startKewordPreviousLength, 0);
+                nLengthPrev = targetText.substring(0,nLengthPrev).getBytes("MS949").length;
+                nLengthPrev = Math.max(nLengthPrev - startKewordPreviousLength,0);
             }
 
             int j = 0;
@@ -184,53 +183,49 @@ public class StringUtil {
                 }
             }
 
-            targetText = new String(bytes, rF, rL, StandardCharsets.UTF_8);
+            targetText = new String(bytes,rF,rL,StandardCharsets.UTF_8);
 
             if (isDot && rF + rL + 3 <= bytes.length) {
                 targetText += "...";
             }
-        } catch (UnsupportedEncodingException e) {
-            log.error("### 지원하지 않는 인코딩입니다. : {}", e.getMessage());
-        }
+        } catch (UnsupportedEncodingException ignored) {}
 
         return targetText;
     }
 
 
-    public static String krStringByteSubstring(String parameterName, final int maxLength) {
+    public static String krStringByteSubstring(String parameterName,final int maxLength) {
         Charset utf8Charset = Charset.forName(StandardCharsets.UTF_8.displayName());
         CharsetDecoder cd = utf8Charset.newDecoder();
 
         try {
             byte[] sba = parameterName.getBytes(StandardCharsets.UTF_8.displayName());
-            ByteBuffer bb = ByteBuffer.wrap(sba, 0, maxLength);
+            ByteBuffer bb = ByteBuffer.wrap(sba,0,maxLength);
             CharBuffer cb = CharBuffer.allocate(maxLength);
             cd.onMalformedInput(CodingErrorAction.IGNORE);
-            cd.decode(bb, cb, true);
+            cd.decode(bb,cb,true);
             cd.flush(cb);
-            parameterName = new String(cb.array(), 0, cb.position());
-        } catch (UnsupportedEncodingException e) {
-            log.error("### 지원하지 않는 인코딩입니다. : {}", e.getMessage());
-        }
+            parameterName = new String(cb.array(),0,cb.position());
+        } catch (UnsupportedEncodingException ignored) {}
 
         return parameterName;
     }
 
 
-    public static String stringLengthLimit(final String str, final int limit) {
-        return str.length() > limit ? str.substring(0, limit) : str;
+    public static String stringLengthLimit(final String str,final int limit) {
+        return str.length() > limit ? str.substring(0,limit) : str;
     }
 
 
-    public static String stringByteLengthLimit(final String str, final int limit) {
-        return str.getBytes().length > limit ? new String(str.getBytes(), 0, limit) : str;
+    public static String stringByteLengthLimit(final String str,final int limit) {
+        return str.getBytes().length > limit ? new String(str.getBytes(),0,limit) : str;
     }
 
 
-    public static String stringByteLengthLimit(final String str, final int limit, final String limitStr, final int limitByte) {
+    public static String stringByteLengthLimit(final String str,final int limit,final String limitStr,final int limitByte) {
         if (str.length() > limit) {
             try {
-                return cut(str, limitByte) + limitStr;
+                return cut(str,limitByte) + limitStr;
             } catch (StringIndexOutOfBoundsException e) {
                 return str;
             }
@@ -241,7 +236,7 @@ public class StringUtil {
 
 
     public static String[] excelEnterSplit(final String str) {
-        return str.split(PatternConstants.ENTER_STR);
+        return str.split(NO_BREAK_SPACE);
     }
 
 
@@ -260,6 +255,6 @@ public class StringUtil {
     }
 
     private static String getEmojiRemoveString(String input,String replaceStr) {
-        return RegHelper.emojiPattern.matcher(input).replaceAll(replaceStr);
+        return RegHelper.EMOJI_PATTERN.matcher(input).replaceAll(replaceStr);
     }
 }

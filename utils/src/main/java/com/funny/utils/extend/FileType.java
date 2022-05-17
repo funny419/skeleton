@@ -48,20 +48,14 @@ public class FileType {
 
 
 
-    public static String getFileType(File file) {
-        String fileType = null;
+    public static String getFileType(File file) throws IOException {
         byte[] bytes = new byte[50];
 
-        try {
-            InputStream inputStream = new FileInputStream(file);
-            inputStream.read(bytes);
+        InputStream inputStream = new FileInputStream(file);
+        inputStream.read(bytes);
 
-            fileType = getFileTypeByStream(bytes);
-
-            inputStream.close();
-        } catch (IOException e) {
-            log.error("getFileType error : " + e.getMessage());
-        }
+        String fileType = getFileTypeByStream(bytes);
+        inputStream.close();
 
         return fileType;
     }
