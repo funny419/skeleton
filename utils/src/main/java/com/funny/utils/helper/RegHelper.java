@@ -1,5 +1,7 @@
 package com.funny.utils.helper;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,18 +24,15 @@ public class RegHelper {
     public static final String REG_SPACE_POINT = "^\\s*|\\s*$";
     public static final String REG_HTML = "<(\\S*?)[^>]*>.*?</\\1>|<.*? />";
     public static final String REG_EMAIL = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-    public static final String REG_FIXED_TELEPHONE = "\\d{3}-\\d{8}|\\d{4}-\\d{7}";
-    public static final String REG_POSTALCODE = "[1-9]\\d{5}(?!\\d)";
-    public static final String REG_IDENTIFICATION_CARD = "\\d{15}|\\d{18}";
     public static final String REG_URL = "^http://([w-]+.)+[w-]+(/[w-./?%&=]*)?$";
-    public static final String REG_MOBILE_TELEPHONE = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
-    public static final String REG_LEGAL_ACCOUNT = "^[a-zA-Z][a-zA-Z0-9_]{4,15}$";
     public static final String REG_IP = "((2[0-4]\\d|25[0-5]|[01]?\\d\\d?)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d\\d?)";
+    public static final String REG_IP6 = "(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))";
 
-    private static final Pattern numericPattern = Pattern.compile("^[0-9\\-]+$");
-    private static final Pattern numericStringPattern = Pattern.compile("^[0-9\\-\\-]+$");
-    private static final Pattern floatNumericPattern = Pattern.compile("^[0-9\\-\\.]+$");
-    private static final Pattern abcPattern = Pattern.compile("^[a-z|A-Z]+$");
+    public static final Pattern numericPattern = Pattern.compile("^[0-9\\-]+$");
+    public static final Pattern numericStringPattern = Pattern.compile("^[0-9\\-\\-]+$");
+    public static final Pattern floatNumericPattern = Pattern.compile("^[0-9\\-\\.]+$");
+    public static final Pattern abcPattern = Pattern.compile("^[a-z|A-Z]+$");
+    public static final Pattern emojiPattern = Pattern.compile("[\\uD83C-\\uDBFF]+|[\\uDC00-\\uDFFF]+");
 
 
 
@@ -77,14 +76,22 @@ public class RegHelper {
     }
 
 
-    public static boolean isMatche(String str, String reg) {
+    /**
+     * method 내 에서 pattern을 매번 실행하는게 성능상 이점이 없을것 같음
+     * 이렇게 isMatch를 사용하는곳도 별로 없을것 같고
+     *
+     * @param str
+     * @param reg
+     * @return
+     */
+    public static boolean isMatche(String str,String reg) {
         Pattern pattern = Pattern.compile(reg);
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
     }
 
 
-    public static int countSubStrReg(String str, String reg) {
+    public static int countSubStrReg(String str,String reg) {
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(str);
 
@@ -104,5 +111,28 @@ public class RegHelper {
 
         Pattern pattern = Pattern.compile(REG_EMAIL);
         return pattern.matcher(email).matches();
+    }
+
+
+    public static boolean isIP6(String ipAddress) {
+        if (StringUtils.isEmpty(ipAddress)) {
+            return false;
+        }
+
+        return isMatche(ipAddress,REG_IP6);
+    }
+
+
+    public static boolean isIP(String ipAddress) {
+        if (StringUtils.isEmpty(ipAddress)) {
+            return false;
+        }
+
+        return isMatche(ipAddress,REG_IP);
+    }
+
+
+    public static boolean isEmojiString(String input) {
+        return emojiPattern.matcher(input).find();
     }
 }

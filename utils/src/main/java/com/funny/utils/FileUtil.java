@@ -227,6 +227,20 @@ public class FileUtil {
     }
 
 
+    public static String fileType(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return "";
+        }
+
+        String[] str = fileName.split("\\.");
+        if (str.length > 1) {
+            return str[str.length-1].trim().toLowerCase();
+        }
+
+        return "";
+    }
+
+
     public static Date modifyTime(File file) {
         return new Date(file.lastModified());
     }
