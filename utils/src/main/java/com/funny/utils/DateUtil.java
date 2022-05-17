@@ -1,11 +1,9 @@
 package com.funny.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,11 +19,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
 import static java.lang.Long.parseLong;
 
 
-@Slf4j
 public class DateUtil {
     public static final String DEFAULT_TIME_ZONE = "GMT+9";
 
@@ -1021,48 +1017,28 @@ public class DateUtil {
     }
 
 
-    public static boolean isValidParseDateStrictly(String dateStr,String parsePattern) {
-        try {
-            DateUtils.parseDateStrictly(dateStr,parsePattern);
-            return true;
-        } catch (Exception e) {
-            log.info("DateUtil.isValidParseDateStrictly : {}",e.getMessage());
-        }
-        return false;
+    public static boolean isValidParseDateStrictly(String dateStr,String parsePattern) throws ParseException {
+        DateUtils.parseDateStrictly(dateStr,parsePattern);
+        return true;
     }
 
 
-    public static LocalDate getParseLocalDateStrictly(String dateStr,String parsePattern) {
-        try {
-            DateUtils.parseDateStrictly(dateStr,parsePattern);
-            return LocalDate.parse(dateStr,DateTimeFormatter.ofPattern(parsePattern));
-        } catch (Exception e) {
-            log.info("DateUtil.getParseLocalDateStrictly : {}",e.getMessage());
-        }
-        return null;
+    public static LocalDate getParseLocalDateStrictly(String dateStr,String parsePattern) throws ParseException {
+        DateUtils.parseDateStrictly(dateStr,parsePattern);
+        return LocalDate.parse(dateStr,DateTimeFormatter.ofPattern(parsePattern));
     }
 
 
-    public static LocalDateTime getParseLocalDateTimeStrictly(String dateStr,String parsePattern) {
-        try {
-            DateUtils.parseDateStrictly(dateStr,parsePattern);
-            return LocalDateTime.parse(dateStr,DateTimeFormatter.ofPattern(parsePattern));
-        } catch (Exception e) {
-            log.info("DateUtil.getParseLocalDateTimeStrictly : {}",e.getMessage());
-        }
-        return null;
+    public static LocalDateTime getParseLocalDateTimeStrictly(String dateStr,String parsePattern) throws ParseException {
+        DateUtils.parseDateStrictly(dateStr,parsePattern);
+        return LocalDateTime.parse(dateStr,DateTimeFormatter.ofPattern(parsePattern));
     }
 
 
-    public static String getDayOfWeekKorNm(String dateStr,String parsePattern){
-        try{
-            DateUtils.parseDateStrictly(dateStr,parsePattern);
-            LocalDate localDate = LocalDate.parse(dateStr,DateTimeFormatter.ofPattern(parsePattern));
-            return localDate.getDayOfWeek().getDisplayName(TextStyle.SHORT,Locale.KOREAN);
-        } catch (Exception e){
-            log.info("DateUtil.getDayOfWeekKorNm : {}",e.getMessage());
-        }
-        return null;
+    public static String getDayOfWeekKorNm(String dateStr,String parsePattern) throws ParseException {
+        DateUtils.parseDateStrictly(dateStr,parsePattern);
+        LocalDate localDate = LocalDate.parse(dateStr,DateTimeFormatter.ofPattern(parsePattern));
+        return localDate.getDayOfWeek().getDisplayName(TextStyle.SHORT,Locale.KOREAN);
     }
 
 

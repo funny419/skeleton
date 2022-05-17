@@ -1,7 +1,6 @@
 package com.funny.utils;
 
 import org.springframework.util.Base64Utils;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.DataFormatException;

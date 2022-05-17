@@ -1,7 +1,6 @@
 package com.funny.utils.helper;
 
 import org.junit.Assert;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -2,8 +2,8 @@ package com.funny.utils.constants;
 
 import com.funny.utils.CollectionUtil;
 import com.funny.utils.helper.IntHashMap;
-
 import java.util.Map;
+
 
 public class Entities {
     private static final String[][] BASIC_SET = {

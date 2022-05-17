@@ -3,7 +3,6 @@ package com.funny.utils;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.NumberUtils;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 

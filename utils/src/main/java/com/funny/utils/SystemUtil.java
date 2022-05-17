@@ -1,11 +1,10 @@
 package com.funny.utils;
 
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 
 public class SystemUtil {
     private static final JvmSpecInfo JVM_SPEC_INFO = new JvmSpecInfo();
