@@ -32,7 +32,7 @@ public class FileUtil {
     }
 
 
-    public static boolean exist(String directory, String regexp) {
+    public static boolean exist(String directory,String regexp) {
         File file = new File(directory);
         if (!file.exists()) {
             return false;
@@ -326,7 +326,7 @@ public class FileUtil {
     }
 
 
-    public static void copyDir(File filePath, String targetPath) throws IOException {
+    public static void copyDir(File filePath,String targetPath) throws IOException {
         File targetFile = new File(targetPath);
         if (!targetFile.exists()) {
             createPaths(targetPath);
@@ -337,9 +337,9 @@ public class FileUtil {
             for (File file : files) {
                 String path = file.getName();
                 if (file.isDirectory()) {
-                    copyDir(file, targetPath + "/" + path);
+                    copyDir(file,targetPath + "/" + path);
                 } else {
-                    copy(file, targetPath + "/" + path);
+                    copy(file,targetPath + "/" + path);
                 }
             }
         }
@@ -352,8 +352,8 @@ public class FileUtil {
     }
 
 
-    public static List<File> listFile(String path, boolean child) {
-        return listFile(new File(path), child);
+    public static List<File> listFile(String path,boolean child) {
+        return listFile(new File(path),child);
     }
 
 
@@ -418,7 +418,7 @@ public class FileUtil {
         if (CheckUtil.valid(files)) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    list.addAll(listFileFilter(file, filter));
+                    list.addAll(listFileFilter(file,filter));
                 } else {
                     if (filter.accept(file.getParentFile(),file.getName())) {
                         list.add(file);
@@ -438,7 +438,7 @@ public class FileUtil {
         if (CheckUtil.valid(files)) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    list.addAll(listFileFilter(file, postfixs));
+                    list.addAll(listFileFilter(file,postfixs));
                 } else {
                     String fileName = file.getName().toLowerCase();
                     if (fileName.endsWith(postfixs.toLowerCase())) {
@@ -459,7 +459,7 @@ public class FileUtil {
         if (CheckUtil.valid(files)) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    list.addAll(searchFile(file, fileName));
+                    list.addAll(searchFile(file,fileName));
                 } else {
                     String Name = file.getName();
                     if (Name.equals(fileName)) {
@@ -473,17 +473,17 @@ public class FileUtil {
     }
 
 
-    public static List<File> searchFileReg(File dirPath, String reg) {
+    public static List<File> searchFileReg(File dirPath,String reg) {
         List<File> list = new ArrayList<>();
 
         File[] files = dirPath.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    list.addAll(searchFile(file, reg));
+                    list.addAll(searchFile(file,reg));
                 } else {
                     String Name = file.getName();
-                    if (RegHelper.isMatche(Name, reg)) {
+                    if (RegHelper.isMatche(Name,reg)) {
                         list.add(file);
                     }
                 }
