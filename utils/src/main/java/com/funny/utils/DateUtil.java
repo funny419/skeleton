@@ -15,12 +15,12 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.*;
 import static java.lang.Long.parseLong;
 
+/**
+ * DateUtils가 있는데 굳이 이걸써야 할 이유가 없을것 같아 보임 :)
+ */
 
 public class DateUtil {
     public static final String DEFAULT_TIME_ZONE = "GMT+9";
@@ -1063,9 +1063,9 @@ public class DateUtil {
 
 
     public static String convertUnixTimeStampToDate(long time,String format) {
-        Date date = new java.util.Date(time*1000L);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat(format);
-        sdf.setTimeZone(java.util.TimeZone.getTimeZone(DEFAULT_TIME_ZONE));
+        Date date = new Date(time*1000L);
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(TimeZone.getTimeZone(DEFAULT_TIME_ZONE));
         return sdf.format(date);
     }
 
@@ -1078,14 +1078,14 @@ public class DateUtil {
         LocalDateTime nowDateTime = LocalDateTime.now();
         String today = nowDateTime.format(DateTimeFormatter.ofPattern(DEFAULT_PATTERN));
 
-        int todayYear = Integer.parseInt(today.substring(0,4));
-        int todayMonth = Integer.parseInt(today.substring(4,8));
+        int todayYear = ConverterUtil.toIntValue(today.substring(0,4));
+        int todayMonth = ConverterUtil.toIntValue(today.substring(4,8));
 
-        int memberYear = Integer.parseInt(birthday.substring(0,4));
-        int memberMonth = Integer.parseInt(birthday.substring(4,8));
+        int memberYear = ConverterUtil.toIntValue(birthday.substring(0,4));
+        int memberMonth = ConverterUtil.toIntValue(birthday.substring(4,8));
 
         int age = todayYear -  memberYear;
-        if( todayMonth < memberMonth ){
+        if (todayMonth < memberMonth) {
             age--;
         }
 
