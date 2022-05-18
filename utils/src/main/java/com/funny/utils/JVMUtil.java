@@ -22,8 +22,8 @@ public class JVMUtil {
 
 
 
-    public static boolean appendToClassPath(String name) {
-        if (!FileUtil.exist(name)) {
+    public static boolean appendToClassPath(String path) {
+        if (!FileUtil.exist(path)) {
             return false;
         }
 
@@ -34,7 +34,7 @@ public class JVMUtil {
                             .getDeclaredMethod("appendToClassPathForInstrumentation",String.class);
 
             appendToClassPathMethod.setAccessible(true);
-            appendToClassPathMethod.invoke(clsLoader,name);
+            appendToClassPathMethod.invoke(clsLoader,path);
 
             return true;
         }
@@ -47,10 +47,11 @@ public class JVMUtil {
     private static Manifest getManifestFromFile(File classpathItem) {
         File metaDir = new File(classpathItem,"META-INF");
         File manifestFile = null;
-        if (metaDir.isDirectory()) {
+
+        if (FileUtil.isDirectory(metaDir)) {
             for (String m : MANIFESTS) {
                 File mFile = new File(metaDir,m);
-                if (mFile.isFile()) {
+                if (FileUtil.isFile(mFile)) {
                     manifestFile = mFile;
                     break;
                 }
@@ -111,7 +112,7 @@ public class JVMUtil {
 
 
     private static String getClasspathItemBaseDir(File classpathItem) {
-        if (classpathItem.isFile()) {
+        if (FileUtil.isFile(classpathItem)) {
             return classpathItem.getParent();
         }
 
@@ -127,7 +128,7 @@ public class JVMUtil {
                 URL[] urls = ((URLClassLoader) classLoader).getURLs();
                 for (URL u : urls) {
                     File f = FileUtil.toFile(u);
-                    if (f != null) {
+                    if (FileUtil.isFile(f)) {
                         try {
                             f = f.getCanonicalFile();
                             classpaths.add(f);
@@ -150,7 +151,6 @@ public class JVMUtil {
     }
 
     private static void addInnerClasspathItems(Set<File> classpaths,File item) throws IOException {
-
         Manifest manifest = getManifest(item);
         if (manifest == null) {
             return;
@@ -173,7 +173,7 @@ public class JVMUtil {
             File file = new File(base,t);
             file = file.getCanonicalFile();
 
-            if (file.exists()) {
+            if (FileUtil.exist(file)) {
                 classpaths.add(file);
             }
         }

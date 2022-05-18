@@ -20,9 +20,6 @@ public class RandomUtil {
         }
     };
 
-    private RandomUtil() {
-    }
-
 
 
 
@@ -105,12 +102,12 @@ public class RandomUtil {
 
 
     public static float floatSeed(float x) {
-        return (float) doubleSeed(0.,x);
+        return ConverterUtil.toFloat(doubleSeed(0.,x));
     }
 
 
     public static float floatSeed(float x,float y) {
-        return (float) doubleSeed(x,y);
+        return ConverterUtil.toFloat(doubleSeed(x,y));
     }
 
 
@@ -128,10 +125,12 @@ public class RandomUtil {
             throw new IllegalArgumentException(Y_GREATER_THAN_X);
         }
 
-        BigDecimal dx = new BigDecimal(String.valueOf(x));
-        BigDecimal dy = new BigDecimal(String.valueOf(y));
+        BigDecimal dx = ConverterUtil.toBigDecimal(String.valueOf(x));
+        BigDecimal dy = ConverterUtil.toBigDecimal(String.valueOf(y));
+
         double diff = dy.subtract(dx).doubleValue();
-        dx = dx.add(new BigDecimal(String.valueOf(getRandom().nextDouble()*diff)));
+        dx = dx.add(ConverterUtil.toBigDecimal(String.valueOf(getRandom().nextDouble()*diff)));
+
         return dx.doubleValue();
     }
 
@@ -154,6 +153,6 @@ public class RandomUtil {
             throw new IllegalArgumentException("y must be less than or equal '~'");
         }
 
-        return (char) (getRandom().nextInt(y - x + 1) + x);
+        return ConverterUtil.toCharacter(getRandom().nextInt(y-x+1)+x);
     }
 }

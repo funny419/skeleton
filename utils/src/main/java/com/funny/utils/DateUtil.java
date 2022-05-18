@@ -233,7 +233,6 @@ public class DateUtil {
         Calendar cal = GregorianCalendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH,days);
-
         return cal.getTime();
     }
 
@@ -250,7 +249,6 @@ public class DateUtil {
         Calendar cal = GregorianCalendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.MINUTE,mins);
-
         return cal.getTime();
     }
 
@@ -306,7 +304,7 @@ public class DateUtil {
 
 
     public static Date getLarger(Date first,Date second) {
-        if ((first == null) && (second == null)) {
+        if (first == null && second == null) {
             return null;
         }
 
@@ -351,6 +349,7 @@ public class DateUtil {
         cal1.setTime(date1);
         Calendar cal2 = GregorianCalendar.getInstance();
         cal2.setTime(date2);
+
         return isSameMonth(cal1,cal2);
     }
 
@@ -368,9 +367,10 @@ public class DateUtil {
         cal1.setTime(date1);
         Calendar cal2 = GregorianCalendar.getInstance();
         cal2.setTime(date2);
-        return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
-                && (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) && (cal1.get(Calendar.DATE) == cal2
-                .get(Calendar.DATE)));
+
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+                cal1.get(Calendar.DATE) == cal2.get(Calendar.DATE);
     }
 
 
@@ -383,7 +383,8 @@ public class DateUtil {
             return false;
         }
 
-        return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) && (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH));
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
     }
 
 
@@ -405,12 +406,14 @@ public class DateUtil {
     public static Date getPreviousMonday() {
         Calendar cd = Calendar.getInstance();
         int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK) - 1;
+
         Date date;
         if (dayOfWeek == 1) {
             date = addDays(cd.getTime(),-7);
         } else {
             date = addDays(cd.getTime(),-6 - dayOfWeek);
         }
+
         return getStartOfDate(date);
     }
 
@@ -418,12 +421,14 @@ public class DateUtil {
     public static Date getMondayBefore4Week() {
         Calendar cd = Calendar.getInstance();
         int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK) - 1;
+
         Date date;
         if (dayOfWeek == 1) {
             date = addDays(cd.getTime(),-28);
         } else {
             date = addDays(cd.getTime(),-27 - dayOfWeek);
         }
+
         return getStartOfDate(date);
     }
 
@@ -431,12 +436,14 @@ public class DateUtil {
     public static Date getCurrentMonday() {
         Calendar cd = Calendar.getInstance();
         int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK) - 1;
+
         Date date;
         if (dayOfWeek == 1) {
             date = cd.getTime();
         } else {
             date = addDays(cd.getTime(),1 - dayOfWeek);
         }
+
         return getStartOfDate(date);
     }
 
@@ -455,13 +462,13 @@ public class DateUtil {
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
         calendar.set(Calendar.MILLISECOND,0);
+
         return new Date(calendar.getTimeInMillis());
     }
 
 
     public static Date getFirstOfMonth(final Date date) {
         Date lastMonth = addMonths(date,-1);
-
         lastMonth = getEndOfMonth(lastMonth);
         return addDays(lastMonth,1);
     }
@@ -471,6 +478,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         }
+
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
 
@@ -479,6 +487,7 @@ public class DateUtil {
             cal.add(Calendar.DATE,-1);
             dw = cal.get(Calendar.DAY_OF_WEEK);
         }
+
         return cal.getTime();
     }
 
@@ -487,6 +496,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         }
+
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
 
@@ -495,6 +505,7 @@ public class DateUtil {
             cal.add(Calendar.DATE,1);
             dw = cal.get(Calendar.DAY_OF_WEEK);
         }
+
         return cal.getTime();
     }
 
@@ -516,11 +527,11 @@ public class DateUtil {
 
 
     public static int getNumberOfSecondsBetween(final double d1,final double d2) {
-        if ((d1 == 0) || (d2 == 0)) {
+        if (d1 == 0 || d2 == 0) {
             return -1;
         }
 
-        return (int) (Math.abs(d1 - d2) / SECOND);
+        return ConverterUtil.toIntValue(Math.abs(d1 - d2) / SECOND);
     }
 
 
@@ -533,7 +544,9 @@ public class DateUtil {
         cal1.setTime(begin);
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(end);
-        return (cal2.get(Calendar.YEAR) - cal1.get(Calendar.YEAR)) * 12 + (cal2.get(Calendar.MONTH) - cal1.get(Calendar.MONTH));
+
+        return (cal2.get(Calendar.YEAR) - cal1.get(Calendar.YEAR)) * 12 +
+                (cal2.get(Calendar.MONTH) - cal1.get(Calendar.MONTH));
     }
 
 
@@ -600,7 +613,6 @@ public class DateUtil {
         } catch (IOException e) {
             return new Date();
         }
-
     }
 
 
@@ -638,6 +650,7 @@ public class DateUtil {
             ctmp.add(Calendar.DATE,-1);
             dw = ctmp.get(Calendar.DAY_OF_WEEK);
         }
+
         return ctmp.getTime();
     }
 
@@ -660,6 +673,7 @@ public class DateUtil {
             ctmp.add(Calendar.DATE,1);
             dw = ctmp.get(Calendar.DAY_OF_WEEK);
         }
+
         return ctmp.getTime();
     }
 
@@ -708,6 +722,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         }
+
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
 
@@ -723,6 +738,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         }
+
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
 
@@ -802,7 +818,7 @@ public class DateUtil {
 
 
     public static String localDateTimetoString(LocalDateTime dateTime,String pattern) {
-        if ((dateTime == null)|| (pattern == null)) {
+        if (dateTime == null || pattern == null) {
             return null;
         }
 
@@ -991,7 +1007,6 @@ public class DateUtil {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         final LocalDateTime currentTime = LocalDateTime.parse(LocalDateTime.now().format(formatter),formatter);
         final LocalDateTime dateTime = LocalDateTime.parse(dt,formatter);
-
         return dateTime.isBefore(currentTime.minusHours(minusHour));
     }
 

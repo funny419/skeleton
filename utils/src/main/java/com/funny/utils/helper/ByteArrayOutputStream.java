@@ -1,5 +1,6 @@
 package com.funny.utils.helper;
 
+import com.funny.utils.ConverterUtil;
 import com.funny.utils.constants.IOConstant;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class ByteArrayOutputStream extends OutputStream {
             shared = false;
         }
 
-        buffer[index++] = (byte) datum;
+        buffer[index++] = ConverterUtil.toByte(datum);
     }
 
 

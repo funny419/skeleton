@@ -19,8 +19,6 @@ public class DateConverter extends TypeAdapter<Date> {
 
 
 
-    public DateConverter() {}
-
 
     public DateConverter(String pattern) {
         if (StringUtils.isNotEmpty(pattern)) {

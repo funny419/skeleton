@@ -37,37 +37,37 @@ public class RegHelper {
 
 
     public static boolean isNumeric(String src) {
-        return !StringUtils.isEmpty(src) && NUMBERIC_PATTERN.matcher(src).find();
+        return StringUtils.isNotEmpty(src) && NUMBERIC_PATTERN.matcher(src).find();
     }
 
 
     public static boolean isABC(String src) {
-        return !StringUtils.isEmpty(src) && ABC_PATTERN.matcher(src).find();
+        return StringUtils.isNotEmpty(src) && ABC_PATTERN.matcher(src).find();
     }
 
 
     public static boolean isFloatNumeric(String src) {
-        return !StringUtils.isEmpty(src) && FLOAT_NUMBERIC_PATTERN.matcher(src).find();
+        return StringUtils.isNotEmpty(src) && FLOAT_NUMBERIC_PATTERN.matcher(src).find();
     }
 
 
     public static boolean isEmail(String email) {
-        return !StringUtils.isEmpty(email) && EMAIL_PATTERN.matcher(email).find();
+        return StringUtils.isNotEmpty(email) && EMAIL_PATTERN.matcher(email).find();
     }
 
 
     public static boolean isIP6(String ipAddress) {
-        return !StringUtils.isEmpty(ipAddress) && IP6_PATTERN.matcher(ipAddress).find();
+        return StringUtils.isNotEmpty(ipAddress) && IP6_PATTERN.matcher(ipAddress).find();
     }
 
 
     public static boolean isIP(String ipAddress) {
-        return !StringUtils.isEmpty(ipAddress) && IP_PATTERN.matcher(ipAddress).find();
+        return StringUtils.isNotEmpty(ipAddress) && IP_PATTERN.matcher(ipAddress).find();
     }
 
 
     public static boolean isEmojiString(String input) {
-        return !StringUtils.isEmpty(input) && EMOJI_PATTERN.matcher(input).find();
+        return StringUtils.isNotEmpty(input) && EMOJI_PATTERN.matcher(input).find();
     }
 
 

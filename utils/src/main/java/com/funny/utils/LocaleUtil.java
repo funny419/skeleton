@@ -15,7 +15,7 @@ public class LocaleUtil {
     private static LocaleInfo defaultLocalInfo = systemLocaleInfo;
     private static final ThreadLocal<LocaleInfo> contextLocaleInfoHolder = new ThreadLocal<LocaleInfo>();
 
-    private static Notifier[] notifiers = getNotifiers();
+    private static final Notifier[] notifiers = getNotifiers();
     private static Notifier[] getNotifiers() {
         try {
             URL[] files = ClassLoaderUtil.getResources("META-INF/services/localeNotifiers",ClassLoaderUtil.class);
@@ -37,7 +37,9 @@ public class LocaleUtil {
 
 
     public static boolean isLocaleSupported(Locale locale) {
-        return locale != null && AvailableLocalesLoader.locales.AVAILABLE_LANGUAGES.contains(locale.getLanguage()) && AvailableLocalesLoader.locales.AVAILABLE_COUNTRIES.contains(locale.getCountry());
+        return locale != null &&
+                AvailableLocalesLoader.locales.AVAILABLE_LANGUAGES.contains(locale.getLanguage()) &&
+                AvailableLocalesLoader.locales.AVAILABLE_COUNTRIES.contains(locale.getCountry());
     }
 
 
@@ -53,7 +55,7 @@ public class LocaleUtil {
             return null;
         }
 
-        String language = Emptys.EMPTY_STRING;
+        String language;
         String country = Emptys.EMPTY_STRING;
         String variant = Emptys.EMPTY_STRING;
 

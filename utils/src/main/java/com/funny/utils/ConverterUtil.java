@@ -251,12 +251,12 @@ public class ConverterUtil {
 
 
     public static long cutUnits(long price) {
-        return (long) (Math.floor((double) price / 10.0D) * 10L);
+        return toLong(Math.floor(toDouble(price)/10.0D)*10L);
     }
 
 
     public static long cutTenBasicUnits(long price) {
-        return (long) (Math.floor((double) price / 100.0D) * 100L);
+        return toLong(Math.floor(toDouble(price)/100.0D)* 100L);
     }
 
 

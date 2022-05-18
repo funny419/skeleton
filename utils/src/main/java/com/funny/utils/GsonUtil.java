@@ -56,13 +56,13 @@ public class GsonUtil {
     }
 
 
-    public static void printJson(HttpServletResponse response, String json) {
+    public static void printJson(HttpServletResponse response,String json) {
         PrintWriter writer = null;
         try {
             response.setContentType("application/json");
             writer = response.getWriter();
             writer.print(json);
-        } catch (IOException ignore) {
+        } catch (IOException ignored) {
         } finally {
             if (writer != null) {
                 writer.close();
@@ -119,19 +119,19 @@ public class GsonUtil {
         }
 
         if (obj instanceof String) {
-            printJson(response, (String) obj);
+            printJson(response,(String) obj);
             return;
         }
 
         String json = toJson(obj);
-        printJson(response, json);
+        printJson(response,json);
     }
 
 
     public static void printError(HttpServletResponse response,String reason) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("error",reason);
-        printJson(response, jsonObject.toString());
+        printJson(response,jsonObject.toString());
     }
 
 
@@ -146,7 +146,7 @@ public class GsonUtil {
     }
 
 
-    public static <T> T wrapDataToEntity(HttpServletRequest request, Class<T> clazz, String... excludeFields) {
+    public static <T> T wrapDataToEntity(HttpServletRequest request,Class<T> clazz,String... excludeFields) {
         if (request == null || clazz == null) {
             throw new InvalidParameterException("ERROR");
         }
@@ -154,7 +154,7 @@ public class GsonUtil {
         String data = null;
         try {
             data = IOUtils.toString(request.getInputStream(),"utf-8");
-        } catch (IOException ignore) {}
+        } catch (IOException ignored) {}
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Date.class,new DateConverter());

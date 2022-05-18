@@ -111,7 +111,7 @@ public class PackageUtil {
         });
 
         for (File file : dirfiles) {
-            if (file.isDirectory()) {
+            if (FileUtil.isDirectory(file)) {
                 findClassesInDirPackage(
                         packageName + "." + file.getName(),
                         included,
@@ -182,8 +182,10 @@ public class PackageUtil {
                         file.getAbsolutePath(),
                         resources
                 );
+
                 continue;
             }
+
             resources.add(packageName + "." + file.getName());
         }
     }
@@ -197,15 +199,12 @@ public class PackageUtil {
         if (packageName.endsWith("/")) {
             packageName = packageName.substring(0,packageName.length() - 1);
         }
+
         return packageName;
     }
 
 
     private static boolean isIncluded(String name,List<String> included,List<String> excluded) {
-        if (CollectionUtils.isEmpty(included) && CollectionUtils.isEmpty(excluded)) {
-            return true;
-        }
-
         included = CollectionUtils.isEmpty(included) ? EMPTY_LIST : included;
         excluded = CollectionUtils.isEmpty(excluded) ? EMPTY_LIST : excluded;
 

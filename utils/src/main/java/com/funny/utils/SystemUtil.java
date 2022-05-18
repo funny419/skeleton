@@ -2,8 +2,6 @@ package com.funny.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 
 public class SystemUtil {
@@ -16,42 +14,47 @@ public class SystemUtil {
     private static final HostInfo HOST_INFO = new HostInfo();
     private static final JavaRuntimeInfo JAVA_RUNTIME_INFO = new JavaRuntimeInfo();
 
-    private SystemUtil() {
-    }
 
-    public static final JvmSpecInfo getJvmSpecInfo() {
+
+
+    public static JvmSpecInfo getJvmSpecInfo() {
         return JVM_SPEC_INFO;
     }
 
-    public static final JvmInfo getJvmInfo() {
+
+    public static JvmInfo getJvmInfo() {
         return JVM_INFO;
     }
 
-    public static final JavaSpecInfo getJavaSpecInfo() {
+
+    public static JavaSpecInfo getJavaSpecInfo() {
         return JAVA_SPEC_INFO;
     }
 
-    public static final JavaInfo getJavaInfo() {
+
+    public static JavaInfo getJavaInfo() {
         return JAVA_INFO;
     }
 
-    public static final JavaRuntimeInfo getJavaRuntimeInfo() {
+
+    public static JavaRuntimeInfo getJavaRuntimeInfo() {
         return JAVA_RUNTIME_INFO;
     }
 
-    public static final OsInfo getOsInfo() {
+
+    public static OsInfo getOsInfo() {
         return OS_INFO;
     }
 
-    public static final UserInfo getUserInfo() {
+
+    public static UserInfo getUserInfo() {
         return USER_INFO;
     }
 
-    public static final HostInfo getHostInfo() {
+
+    public static HostInfo getHostInfo() {
         return HOST_INFO;
     }
-
-
 
 
     public static final class JvmSpecInfo {
@@ -59,18 +62,16 @@ public class SystemUtil {
         private final String JAVA_VM_SPECIFICATION_VERSION = getSystemProperty("java.vm.specification.version",false);
         private final String JAVA_VM_SPECIFICATION_VENDOR = getSystemProperty("java.vm.specification.vendor",false);
 
-        private JvmSpecInfo() {
-        }
 
-        public final String getName() {
+        public String getName() {
             return JAVA_VM_SPECIFICATION_NAME;
         }
 
-        public final String getVersion() {
+        public String getVersion() {
             return JAVA_VM_SPECIFICATION_VERSION;
         }
 
-        public final String getVendor() {
+        public String getVendor() {
             return JAVA_VM_SPECIFICATION_VENDOR;
         }
     }
@@ -84,22 +85,20 @@ public class SystemUtil {
         private final String JAVA_VM_VENDOR = getSystemProperty("java.vm.vendor",false);
         private final String JAVA_VM_INFO = getSystemProperty("java.vm.info",false);
 
-        private JvmInfo() {
-        }
 
-        public final String getName() {
+        public String getName() {
             return JAVA_VM_NAME;
         }
 
-        public final String getVersion() {
+        public String getVersion() {
             return JAVA_VM_VERSION;
         }
 
-        public final String getVendor() {
+        public String getVendor() {
             return JAVA_VM_VENDOR;
         }
 
-        public final String getInfo() {
+        public String getInfo() {
             return JAVA_VM_INFO;
         }
     }
@@ -112,18 +111,16 @@ public class SystemUtil {
         private final String JAVA_SPECIFICATION_VERSION = getSystemProperty("java.specification.version",false);
         private final String JAVA_SPECIFICATION_VENDOR = getSystemProperty("java.specification.vendor",false);
 
-        private JavaSpecInfo() {
-        }
 
-        public final String getName() {
+        public String getName() {
             return JAVA_SPECIFICATION_NAME;
         }
 
-        public final String getVersion() {
+        public String getVersion() {
             return JAVA_SPECIFICATION_VERSION;
         }
 
-        public final String getVendor() {
+        public String getVendor() {
             return JAVA_SPECIFICATION_VENDOR;
         }
     }
@@ -150,18 +147,17 @@ public class SystemUtil {
         private final boolean IS_JAVA_1_10 = getJavaVersionMatches("1.10");
         private final boolean IS_JAVA_1_11 = getJavaVersionMatches("1.11");
 
-        private JavaInfo() {
-        }
 
-        public final String getVersion() {
+        public String getVersion() {
             return JAVA_VERSION;
         }
 
-        public final float getVersionFloat() {
+
+        public float getVersionFloat() {
             return JAVA_VERSION_FLOAT;
         }
 
-        public final int getVersionInt() {
+        public int getVersionInt() {
             return JAVA_VERSION_INT;
         }
 
@@ -176,7 +172,7 @@ public class SystemUtil {
                 str = str + JAVA_VERSION.substring(4,5);
             }
 
-            return Float.parseFloat(str);
+            return ConverterUtil.toFloat(str);
         }
 
         private int getJavaVersionAsInt() {
@@ -185,7 +181,6 @@ public class SystemUtil {
             }
 
             String str = JAVA_VERSION.substring(0,1);
-
             str = str + JAVA_VERSION.substring(2,3);
 
             if (JAVA_VERSION.length() >= 5) {
@@ -197,55 +192,55 @@ public class SystemUtil {
             return Integer.parseInt(str);
         }
 
-        public final String getVendor() {
+        public String getVendor() {
             return JAVA_VENDOR;
         }
 
-        public final String getVendorURL() {
+        public String getVendorURL() {
             return JAVA_VENDOR_URL;
         }
 
-        public final boolean isJava11() {
+        public boolean isJava11() {
             return IS_JAVA_1_1;
         }
 
-        public final boolean isJava12() {
+        public boolean isJava12() {
             return IS_JAVA_1_2;
         }
 
-        public final boolean isJava13() {
+        public boolean isJava13() {
             return IS_JAVA_1_3;
         }
 
-        public final boolean isJava14() {
+        public boolean isJava14() {
             return IS_JAVA_1_4;
         }
 
-        public final boolean isJava15() {
+        public boolean isJava15() {
             return IS_JAVA_1_5;
         }
 
-        public final boolean isJava16() {
+        public boolean isJava16() {
             return IS_JAVA_1_6;
         }
 
-        public final boolean isJava17() {
+        public boolean isJava17() {
             return IS_JAVA_1_7;
         }
 
-        public final boolean isJava18() {
+        public boolean isJava18() {
             return IS_JAVA_1_8;
         }
 
-        public final boolean isJava19() {
+        public boolean isJava19() {
             return IS_JAVA_1_9;
         }
 
-        public final boolean isJava110() {
+        public boolean isJava110() {
             return IS_JAVA_1_10;
         }
 
-        public final boolean isJava111() {
+        public boolean isJava111() {
             return IS_JAVA_1_11;
         }
 
@@ -257,11 +252,11 @@ public class SystemUtil {
             return JAVA_VERSION.startsWith(versionPrefix);
         }
 
-        public final boolean isJavaVersionAtLeast(float requiredVersion) {
+        public boolean isJavaVersionAtLeast(float requiredVersion) {
             return getVersionFloat() >= requiredVersion;
         }
 
-        public final boolean isJavaVersionAtLeast(int requiredVersion) {
+        public boolean isJavaVersionAtLeast(int requiredVersion) {
             return getVersionInt() >= requiredVersion;
         }
     }
@@ -281,8 +276,6 @@ public class SystemUtil {
         private final String SUN_BOOT_CLASS_PATH = getSystemProperty("sun.boot.class.path",false);
         private final String SUN_ARCH_DATA_MODEL = getSystemProperty("sun.arch.data.model",false);
 
-        private JavaRuntimeInfo() {
-        }
 
         public String getSunBoothClassPath() {
             return SUN_BOOT_CLASS_PATH;
@@ -366,8 +359,6 @@ public class SystemUtil {
         private final String LINE_SEPARATOR = getSystemProperty("line.separator",false);
         private final String PATH_SEPARATOR = getSystemProperty("path.separator",false);
 
-        private OsInfo() {
-        }
 
         public String getArch() {
             return OS_ARCH;
@@ -489,8 +480,6 @@ public class SystemUtil {
         private final String USER_COUNTRY = ((getSystemProperty("user.country",false) == null) ? getSystemProperty("user.region",false) : getSystemProperty("user.country",false));
         private final String JAVA_IO_TMPDIR = getSystemProperty("java.io.tmpdir",false);
 
-        private UserInfo() {
-        }
 
         public String getName() {
             return USER_NAME;
@@ -525,21 +514,8 @@ public class SystemUtil {
         private final String HOST_ADDRESS;
 
         private HostInfo() {
-            String hostName;
-            String hostAddress;
-
-            try {
-                InetAddress localhost = InetAddress.getLocalHost();
-
-                hostName = localhost.getHostName();
-                hostAddress = localhost.getHostAddress();
-            } catch (UnknownHostException e) {
-                hostName = "localhost";
-                hostAddress = "127.0.0.1";
-            }
-
-            HOST_NAME = hostName;
-            HOST_ADDRESS = hostAddress;
+            HOST_NAME = NetworkUtil.getLocalHostname();
+            HOST_ADDRESS = NetworkUtil.getLocalHostIp();
         }
 
         public String getName() {
@@ -551,9 +527,11 @@ public class SystemUtil {
         }
     }
 
+
     public static void dumpSystemInfo() {
         dumpSystemInfo(new PrintWriter(System.out));
     }
+
 
     public static void dumpSystemInfo(PrintWriter out) {
         out.println("--------------");

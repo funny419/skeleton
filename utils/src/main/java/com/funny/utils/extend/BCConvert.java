@@ -1,5 +1,6 @@
 package com.funny.utils.extend;
 
+import com.funny.utils.ConverterUtil;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -27,7 +28,7 @@ public class BCConvert {
             if (t == DBC_SPACE) {
                 result.append(SBC_SPACE);
             } else if ((t >= DBC_CHAR_START) && (t <= DBC_CHAR_END)) {
-                result.append((char) (t + CONVERT_STEP));
+                result.append(ConverterUtil.toCharacter(t + CONVERT_STEP));
             } else {
                 result.append(t);
             }
@@ -47,7 +48,7 @@ public class BCConvert {
 
         for (int i=0,cnt=input.length();i<cnt;i++) {
             if (ca[i] >= SBC_CHAR_START && ca[i] <= SBC_CHAR_END) {
-                result.append((char) (ca[i] - CONVERT_STEP));
+                result.append(ConverterUtil.toCharacter(ca[i] - CONVERT_STEP));
             } else if (ca[i] == SBC_SPACE) {
                 result.append(DBC_SPACE);
             } else {

@@ -6,14 +6,14 @@ import java.nio.charset.StandardCharsets;
 
 public final class CharUtil {
     public static char toChar(byte b) {
-        return (char) (b & 0xFF);
+        return ConverterUtil.toCharacter(b & 0xFF);
     }
 
 
     public static byte[] toSimpleByteArray(char[] values) {
         byte[] temp = new byte[values.length];
         for (int i=0,cnt=values.length;i<cnt;i++) {
-            temp[i] = (byte) values[i];
+            temp[i] = ConverterUtil.toByte(values[i]);
         }
 
         return temp;
@@ -23,7 +23,7 @@ public final class CharUtil {
     public static char[] toSimpleCharArray(byte[] values) {
         char[] temp = new char[values.length];
         for (int i=0,cnt=values.length;i<cnt;i++) {
-            temp[i] = (char) (values[i] & 0xFF);
+            temp[i] = ConverterUtil.toCharacter(values[i] & 0xFF);
         }
 
         return temp;
@@ -38,7 +38,7 @@ public final class CharUtil {
     public static byte[] toAsciiByteArray(char[] chars) {
         byte[] temp = new byte[chars.length];
         for (int i=0,cnt=chars.length;i<cnt;i++) {
-            temp[i] = (byte) toAscii((char) temp[i]);
+            temp[i] = ConverterUtil.toByte(toAscii(ConverterUtil.toCharacter(temp[i])));
         }
 
         return temp;
@@ -49,7 +49,7 @@ public final class CharUtil {
         byte[] temp = new byte[sequence.length()];
         for (int i=0,cnt=sequence.length();i<cnt;i++) {
             char c = sequence.charAt(i);
-            temp[i] = (byte) toAscii(c);
+            temp[i] = ConverterUtil.toByte(toAscii(c));
         }
 
         return temp;
@@ -60,8 +60,8 @@ public final class CharUtil {
         byte[] temp = new byte[chars.length << 1];
         for (int i=0,pos=0,cnt=chars.length;i<cnt;i++) {
             char c = chars[i];
-            temp[pos++] = (byte) ((c & 0xFF00) >> 8);
-            temp[pos++] = (byte) (c & 0x00FF);
+            temp[pos++] = ConverterUtil.toByte((c & 0xFF00) >> 8);
+            temp[pos++] = ConverterUtil.toByte(c & 0x00FF);
         }
 
         return temp;
@@ -77,7 +77,7 @@ public final class CharUtil {
         char[] temp = new char[length];
         int i = 0, j = 0;
         while (i < bytes.length) {
-            char c = (char) (bytes[i] << 8);
+            char c = ConverterUtil.toCharacter(bytes[i] << 8);
             i++;
 
             if (i != bytes.length) {
@@ -270,7 +270,7 @@ public final class CharUtil {
 
     public static char toUpperAscii(char c) {
         if (isLowercaseAlpha(c)) {
-            c -= (char) 0x20;
+            c -= ConverterUtil.toCharacter(0x20);
         }
 
         return c;
@@ -279,7 +279,7 @@ public final class CharUtil {
 
     public static char toLowerAscii(char c) {
         if (isUppercaseAlpha(c)) {
-            c += (char) 0x20;
+            c += ConverterUtil.toCharacter(0x20);
         }
 
         return c;

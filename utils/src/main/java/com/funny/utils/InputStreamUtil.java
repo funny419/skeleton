@@ -8,7 +8,7 @@ public class InputStreamUtil {
         byte[] bytes = new byte[4096];
         StringBuilder result = new StringBuilder();
 
-        for (int n; (n = input.read(bytes)) != -1; ) {
+        for (int n; (n = input.read(bytes)) != -1;) {
             result.append(new String(bytes,0,n));
         }
 
@@ -52,7 +52,7 @@ public class InputStreamUtil {
 
         int len;
         while ((len = input.read(buffer)) > 0) {
-            fos.write(buffer, 0, len);
+            fos.write(buffer,0,len);
         }
     }
 }

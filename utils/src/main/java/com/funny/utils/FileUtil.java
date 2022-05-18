@@ -280,16 +280,14 @@ public class FileUtil {
 
     public static boolean createFiles(String filePath) throws IOException {
         File file = new File(filePath);
-        if (file.isDirectory()) {
-            if (!file.exists()) {
+        if (isDirectory(file)) {
+            if (!exist(file)) {
                 return file.mkdirs();
             }
         } else {
             File dir = file.getParentFile();
-            if (!dir.exists()) {
-                if (dir.mkdirs()) {
-                    return file.createNewFile();
-                }
+            if (!exist(dir) && dir.mkdirs()) {
+                return file.createNewFile();
             }
         }
 
@@ -307,7 +305,7 @@ public class FileUtil {
 
         if (CheckUtil.valid(files)) {
             for (File f : files) {
-                if (f.isDirectory()) {
+                if (isDirectory(f)) {
                     deleteDir(f);
                 } else {
                     deleteFile(f);
@@ -332,7 +330,7 @@ public class FileUtil {
 
     public static void copyDir(File filePath,String targetPath) throws IOException {
         File targetFile = new File(targetPath);
-        if (!targetFile.exists()) {
+        if (!exist(targetFile)) {
             createPaths(targetPath);
         }
 
@@ -340,7 +338,7 @@ public class FileUtil {
         if (CheckUtil.valid(files)) {
             for (File file : files) {
                 String path = file.getName();
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     copyDir(file,targetPath + "/" + path);
                 } else {
                     copy(file,targetPath + "/" + path);
@@ -367,7 +365,7 @@ public class FileUtil {
         File[] files = path.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     list.addAll(listFile(file));
                 } else {
                     list.add(file);
@@ -385,7 +383,7 @@ public class FileUtil {
         File[] files = path.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
-                if (child && file.isDirectory()) {
+                if (child && isDirectory(file)) {
                     list.addAll(listFile(file));
                 } else {
                     list.add(file);
@@ -405,7 +403,7 @@ public class FileUtil {
             for (File file : files) {
                 list.add(file);
 
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     list.addAll(listFileAll(file));
                 }
             }
@@ -421,7 +419,7 @@ public class FileUtil {
         File[] files = path.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     list.addAll(listFileFilter(file,filter));
                 } else {
                     if (filter.accept(file.getParentFile(),file.getName())) {
@@ -441,7 +439,7 @@ public class FileUtil {
         File[] files = dirPath.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     list.addAll(listFileFilter(file,postfixs));
                 } else {
                     String fileName = file.getName().toLowerCase();
@@ -462,7 +460,7 @@ public class FileUtil {
         File[] files = dirPath.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     list.addAll(searchFile(file,fileName));
                 } else {
                     String Name = file.getName();
@@ -483,7 +481,7 @@ public class FileUtil {
         File[] files = dirPath.listFiles();
         if (CheckUtil.valid(files)) {
             for (File file : files) {
-                if (file.isDirectory()) {
+                if (isDirectory(file)) {
                     list.addAll(searchFile(file,reg));
                 } else {
                     String Name = file.getName();

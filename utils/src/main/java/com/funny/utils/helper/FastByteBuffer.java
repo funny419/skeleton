@@ -85,7 +85,7 @@ public class FastByteBuffer {
 
 
     public FastByteBuffer append(byte element) {
-        if ((currentBuffer == null) || (offset == currentBuffer.length)) {
+        if (currentBuffer == null || offset == currentBuffer.length) {
             needNewBuffer(size + 1);
         }
 
@@ -202,7 +202,7 @@ public class FastByteBuffer {
 
 
     public byte get(int index) {
-        if ((index >= size) || (index < 0)) {
+        if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException();
         }
 

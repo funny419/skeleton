@@ -47,7 +47,7 @@ public class EscapeUtil {
     }
 
     private static String escapeJavaStyleString(String str,boolean javascript,boolean strict) throws IOException {
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return null;
         }
 
@@ -60,13 +60,12 @@ public class EscapeUtil {
     }
 
     private static boolean escapeJavaStyleString(String str,boolean javascript,Appendable out,boolean strict) throws IOException {
-        boolean needToChange = false;
-
         if (out == null) {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
-        if (str == null) {
+        boolean needToChange = false;
+        if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
 
@@ -185,7 +184,6 @@ public class EscapeUtil {
         }
 
         StringBuilder out = new StringBuilder(str.length());
-
         if (unescapeJavaStyleString(str,out)) {
             return out.toString();
         }
@@ -194,20 +192,21 @@ public class EscapeUtil {
     }
 
     private static boolean unescapeJavaStyleString(String str,Appendable out) throws IOException {
-        boolean needToChange = false;
-
         if (out == null) {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
+        boolean needToChange = false;
         if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
 
         int length = str.length();
         StringBuilder unicode = new StringBuilder(4);
+
         boolean hadSlash = false;
         boolean inUnicode = false;
+
         for (int i = 0; i < length; i++) {
             char ch = str.charAt(i);
 
@@ -332,7 +331,6 @@ public class EscapeUtil {
         }
 
         StringBuilder out = new StringBuilder(str.length());
-
         if (escapeEntitiesInternal(entities,str,out)) {
             return out.toString();
         }
@@ -372,7 +370,6 @@ public class EscapeUtil {
         }
 
         StringBuilder out = new StringBuilder(str.length());
-
         if (unescapeEntitiesInternal(entities,str,out)) {
             return out.toString();
         }
@@ -386,8 +383,6 @@ public class EscapeUtil {
     }
 
     private static boolean escapeEntitiesInternal(Entities entities,String str,Appendable out) throws IOException {
-        boolean needToChange = false;
-
         if (entities == null) {
             throw new IllegalArgumentException("The Entities must not be null");
         }
@@ -396,6 +391,7 @@ public class EscapeUtil {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
+        boolean needToChange = false;
         if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
@@ -417,13 +413,13 @@ public class EscapeUtil {
         return needToChange;
     }
 
-    private static boolean unescapeEntitiesInternal(Entities entities,String str,Appendable out) throws IOException {
-        boolean needToChange = false;
 
+    private static boolean unescapeEntitiesInternal(Entities entities,String str,Appendable out) throws IOException {
         if (out == null) {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
+        boolean needToChange = false;
         if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
@@ -433,7 +429,6 @@ public class EscapeUtil {
 
             if (ch == '&') {
                 int semi = str.indexOf(';',i + 1);
-
                 if (semi == -1 || i + 1 >= semi - 1) {
                     out.append(ch);
                     continue;
@@ -451,7 +446,6 @@ public class EscapeUtil {
                     }
 
                     char firstChar = str.charAt(firstCharIndex);
-
                     if (firstChar == 'x' || firstChar == 'X') {
                         firstCharIndex++;
                         radix = 16;
@@ -466,7 +460,7 @@ public class EscapeUtil {
 
                     try {
                         int entityValue = Integer.parseInt(str.substring(firstCharIndex,semi),radix);
-                        out.append((char) entityValue);
+                        out.append(ConverterUtil.toCharacter(entityValue));
                         needToChange = true;
                     } catch (NumberFormatException e) {
                         out.append(ch);
@@ -487,7 +481,7 @@ public class EscapeUtil {
                         out.append(entityName);
                         out.append(';');
                     } else {
-                        out.append((char) entityValue);
+                        out.append(ConverterUtil.toCharacter(entityValue));
                         needToChange = true;
                     }
                 }
@@ -511,14 +505,15 @@ public class EscapeUtil {
         }
 
         String result = StringUtils.replace(str,"'","''");
-
-        if (result != null) {
+        if (StringUtils.isNotEmpty(result)) {
             out.append(result);
         }
     }
 
-    private static final BitSet ALPHA = new BitSet(256);
 
+
+
+    private static final BitSet ALPHA = new BitSet(256);
     static {
         for (int i = 'a'; i <= 'z'; i++) {
             ALPHA.set(i);
@@ -529,8 +524,8 @@ public class EscapeUtil {
         }
     }
 
-    private static final BitSet ALPHANUM = new BitSet(256);
 
+    private static final BitSet ALPHANUM = new BitSet(256);
     static {
         ALPHANUM.or(ALPHA);
 
@@ -539,8 +534,8 @@ public class EscapeUtil {
         }
     }
 
-    private static final BitSet MARK = new BitSet(256);
 
+    private static final BitSet MARK = new BitSet(256);
     static {
         MARK.set('-');
         MARK.set('_');
@@ -553,9 +548,8 @@ public class EscapeUtil {
         MARK.set(')');
     }
 
-    /** "Reserved" characters from RFC 2396. */
-    private static final BitSet RESERVED = new BitSet(256);
 
+    private static final BitSet RESERVED = new BitSet(256);
     static {
         RESERVED.set(';');
         RESERVED.set('/');
@@ -569,15 +563,15 @@ public class EscapeUtil {
         RESERVED.set(',');
     }
 
-    private static final BitSet UNRESERVED = new BitSet(256);
 
+    private static final BitSet UNRESERVED = new BitSet(256);
     static {
         UNRESERVED.or(ALPHANUM);
         UNRESERVED.or(MARK);
     }
 
-    private static final char[] HEXADECIMAL = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
 
+    private static final char[] HEXADECIMAL = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
     public static String escapeURL(String str) {
         try {
             return escapeURLInternal(str,null,true);
@@ -608,7 +602,6 @@ public class EscapeUtil {
         }
 
         StringBuilder out = new StringBuilder(64);
-
         if (escapeURLInternal(str,encoding,out,strict)) {
             return out.toString();
         }
@@ -631,17 +624,18 @@ public class EscapeUtil {
         }
 
         char[] charArray = str.toCharArray();
-        int length = charArray.length;
-
         for (int ch : charArray) {
+            char toCharacter = ConverterUtil.toCharacter(ch);
+
             if (isSafeCharacter(ch, strict)) {
-                out.append((char) ch);
-            } else if (ch == ' ') {
+                out.append(ConverterUtil.toCharacter(toCharacter));
+            }
+            else if (ch == ' ') {
                 out.append('+');
                 needToChange = true;
-            } else {
-                byte[] bytes = String.valueOf((char) ch).getBytes(encoding);
-
+            }
+            else {
+                byte[] bytes = String.valueOf(toCharacter).getBytes(encoding);
                 for (byte toEscape : bytes) {
                     out.append('%');
 
@@ -664,7 +658,7 @@ public class EscapeUtil {
             return UNRESERVED.get(ch);
         }
 
-        return ch > ' ' && !RESERVED.get(ch) && !Character.isWhitespace((char) ch);
+        return ch > ' ' && !RESERVED.get(ch) && !Character.isWhitespace(ConverterUtil.toCharacter(ch));
     }
 
 
@@ -692,7 +686,6 @@ public class EscapeUtil {
         }
 
         StringBuilder out = new StringBuilder(str.length());
-
         if (unescapeURLInternal(str,encoding,out)) {
             return out.toString();
         }
@@ -709,11 +702,10 @@ public class EscapeUtil {
             encoding = LocaleUtil.getContext().getCharset().name();
         }
 
-        boolean needToChange = false;
-
-        byte[] buffer = null;
         int pos = 0;
         int startIndex = 0;
+        byte[] buffer = null;
+        boolean needToChange = false;
 
         char[] charArray = str.toCharArray();
         int length = charArray.length;
@@ -739,22 +731,22 @@ public class EscapeUtil {
                     case '%':
                         if (i + 2 < length) {
                             try {
-                                byte b = (byte) Integer.parseInt(str.substring(i + 1,i + 3),16);
+                                byte b = ConverterUtil.toByte(Integer.parseInt(str.substring(i + 1,i + 3),16));
 
                                 buffer[pos++] = b;
                                 i += 2;
                                 needToChange = true;
                             } catch (NumberFormatException e) {
-                                buffer[pos++] = (byte) ch;
+                                buffer[pos++] = ConverterUtil.toByte(ch);
                             }
                         } else {
-                            buffer[pos++] = (byte) ch;
+                            buffer[pos++] = ConverterUtil.toByte(ch);
                         }
 
                         break;
 
                     default:
-                        buffer[pos++] = (byte) ch;
+                        buffer[pos++] = ConverterUtil.toByte(ch);
                         break;
                 }
                 continue;
@@ -770,7 +762,8 @@ public class EscapeUtil {
 
                 pos = 0;
             }
-            out.append((char) ch);
+
+            out.append(ConverterUtil.toCharacter(ch));
         } // for end
 
         if (pos > 0) {

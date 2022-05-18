@@ -6,7 +6,7 @@ import java.io.*;
 
 
 public class InOutStreamHelper {
-    public static void io(InputStream in, OutputStream out) throws IOException {
+    public static void io(InputStream in,OutputStream out) throws IOException {
         io(in,out,-1);
     }
 
@@ -20,7 +20,7 @@ public class InOutStreamHelper {
         int amount;
 
         while ((amount = in.read(buffer)) >= 0) {
-            out.write(buffer, 0, amount);
+            out.write(buffer,0,amount);
         }
 
         out.flush();
@@ -41,7 +41,7 @@ public class InOutStreamHelper {
         int amount;
 
         while ((amount = in.read(buffer)) >= 0) {
-            out.write(buffer, 0, amount);
+            out.write(buffer,0,amount);
         }
 
         out.flush();
@@ -151,7 +151,7 @@ public class InOutStreamHelper {
 
     public static void io(Reader in,String dest) throws IOException {
         Writer out = new FileWriter(dest);
-        io(in, out);
+        io(in,out);
     }
 
 
@@ -179,7 +179,7 @@ public class InOutStreamHelper {
 
 
     public static OutputStream synchronizedOutputStream(OutputStream out,Object lock) {
-        return new SynchronizedOutputStream(out, lock);
+        return new SynchronizedOutputStream(out,lock);
     }
 
 
@@ -201,7 +201,7 @@ public class InOutStreamHelper {
 
     public static String readText(InputStream in,String charset,boolean closeIn) throws IOException {
         Reader reader = charset == null ? new InputStreamReader(in) : new InputStreamReader(in,charset);
-        return readText(reader, closeIn);
+        return readText(reader,closeIn);
     }
 
 
@@ -213,7 +213,7 @@ public class InOutStreamHelper {
 
 
     public static String readText(Reader reader) throws IOException {
-        return readText(reader, -1);
+        return readText(reader,-1);
     }
 
 
@@ -231,7 +231,7 @@ public class InOutStreamHelper {
     }
 
 
-    public static ByteArray readBytes(InputStream in, boolean closeIn) throws IOException {
+    public static ByteArray readBytes(InputStream in,boolean closeIn) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         io(in,out,closeIn,true);
         return out.toByteArray();
@@ -244,7 +244,7 @@ public class InOutStreamHelper {
     }
 
 
-    public static ByteArray readBytes(File file, boolean closeIn) throws IOException {
+    public static ByteArray readBytes(File file,boolean closeIn) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         io(new FileInputStream(file),out,closeIn,true);
         return out.toByteArray();
@@ -260,7 +260,7 @@ public class InOutStreamHelper {
 
     public static byte[] readBytesByFast(InputStream in,boolean closeIn) throws IOException {
         FastByteArrayOutputStream out = new FastByteArrayOutputStream();
-        io(in, out, closeIn, true);
+        io(in,out,closeIn,true);
         return out.toByteArray();
     }
 
@@ -280,14 +280,14 @@ public class InOutStreamHelper {
             if (closeOut) {
                 try {
                     out.close();
-                } catch (IOException ignore) {}
+                } catch (IOException ignored) {}
             }
         }
     }
 
 
     public static void writeBytes(byte[] bytes,String filePath,boolean closeOut) throws IOException {
-        writeBytes(new ByteArray(bytes), new FileOutputStream(filePath), closeOut);
+        writeBytes(new ByteArray(bytes),new FileOutputStream(filePath),closeOut);
     }
 
 
@@ -320,7 +320,7 @@ public class InOutStreamHelper {
         if (closed != null) {
             try {
                 closed.close();
-            } catch (IOException ignore) {}
+            } catch (IOException ignored) {}
         }
     }
 
@@ -351,7 +351,7 @@ public class InOutStreamHelper {
 
         public void write(byte[] data,int offset,int length) throws IOException {
             synchronized (lock) {
-                out.write(data, offset, length);
+                out.write(data,offset,length);
             }
         }
 

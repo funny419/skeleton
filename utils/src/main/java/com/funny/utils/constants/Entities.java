@@ -1,6 +1,7 @@
 package com.funny.utils.constants;
 
 import com.funny.utils.CollectionUtil;
+import com.funny.utils.ConverterUtil;
 import com.funny.utils.helper.IntHashMap;
 import java.util.Map;
 
@@ -345,9 +346,10 @@ public class Entities {
 
     public void addEntities(String[][] entitySet) {
         for (String[] strings : entitySet) {
-            addEntity(strings[0],Integer.parseInt(strings[1]));
+            addEntity(strings[0],ConverterUtil.toIntValue(strings[1]));
         }
     }
+
 
     public void addEntity(String name,int value) {
         entityNameToValue.put(name,value);
@@ -357,6 +359,7 @@ public class Entities {
             lookupTable[value] = name;
         }
     }
+
 
     public String getEntityName(int value) {
         if (value < LOOKUP_TABLE_SIZE) {
@@ -374,9 +377,9 @@ public class Entities {
         return entityValueToName.get(value);
     }
 
+
     public int getEntityValue(String name) {
         Integer value = entityNameToValue.get(name);
-
         if (value == null) {
             return -1;
         }

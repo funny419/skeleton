@@ -89,25 +89,33 @@ public class StringUtil {
             } else {
                 ary = new String[]{raw};
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
 
         return ary;
     }
 
     public static String cut(String s,int n) {
         byte[] utf8 = s.getBytes();
-        if (utf8.length < n) n = utf8.length;
+        if (utf8.length < n) {
+            n = utf8.length;
+        }
+
         int n16 = 0;
         boolean extraLong = false;
-        int i = 0;
 
+        int i = 0;
         while (i < n) {
             n16 += (extraLong) ? 2 : 1;
             extraLong = false;
-            if ((utf8[i] & 0x80) == 0) i += 1;
-            else if ((utf8[i] & 0xC0) == 0x80) i += 2;
-            else if ((utf8[i] & 0xE0) == 0xC0) i += 3;
+            if ((utf8[i] & 0x80) == 0) {
+                i += 1;
+            }
+            else if ((utf8[i] & 0xC0) == 0x80) {
+                i += 2;
+            }
+            else if ((utf8[i] & 0xE0) == 0xC0) {
+                i += 3;
+            }
             else {
                 i += 4;
                 extraLong = true;
@@ -119,15 +127,14 @@ public class StringUtil {
 
 
     public static String stringCut(String sourceText,String startKeyword,int cutLength,int startKewordPreviousLength,boolean isTag,boolean isDot) {
-        String targetText = sourceText;
         int oF = 0;
         int oL = 0;
         int rF = 0;
         int rL = 0;
         int nLengthPrev = 0;
 
+        String targetText = sourceText;
         Pattern p = RegHelper.CASE_INSENSITIVE_PATTERN;
-
         if (isTag) {
             targetText = p.matcher(targetText).replaceAll("");
         }
@@ -138,7 +145,7 @@ public class StringUtil {
         try {
             byte[] bytes = targetText.getBytes(StandardCharsets.UTF_8);
             if (startKeyword != null && !startKeyword.equals("")) {
-                nLengthPrev = !targetText.contains(startKeyword) ? 0 : targetText.indexOf(startKeyword); // 일단 위치찾고
+                nLengthPrev = !targetText.contains(startKeyword) ? 0 : targetText.indexOf(startKeyword);
                 nLengthPrev = targetText.substring(0,nLengthPrev).getBytes("MS949").length;
                 nLengthPrev = Math.max(nLengthPrev - startKewordPreviousLength,0);
             }
