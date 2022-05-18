@@ -3,6 +3,7 @@ package com.funny.utils;
 import com.funny.utils.extend.FileType;
 import com.funny.utils.helper.RegHelper;
 import com.funny.utils.helper.SysHelper;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -23,7 +24,7 @@ public class FileUtil {
 
 
     public static boolean exist(String path) {
-        return path != null && new File(path).exists();
+        return StringUtils.isNotEmpty(path) && new File(path).exists();
     }
 
 
@@ -33,18 +34,22 @@ public class FileUtil {
 
 
     public static boolean exist(String directory,String regexp) {
+        if (StringUtils.isEmpty(directory)) {
+            return false;
+        }
+
         File file = new File(directory);
-        if (!file.exists()) {
+        if (!exist(file)) {
             return false;
         }
 
         String[] fileList = file.list();
-        if (fileList == null) {
+        if (ArrayUtils.isEmpty(fileList)) {
             return false;
         }
 
         for (String fileName : fileList) {
-            if (fileName.matches(regexp)) {
+            if (StringUtils.isNotEmpty(fileName) && fileName.matches(regexp)) {
                 return true;
             }
         }
@@ -63,8 +68,7 @@ public class FileUtil {
         }
 
         String path = url.getPath();
-
-        return (path != null) ? new File(EscapeUtil.unescapeURL(path)) : null;
+        return StringUtils.isNotEmpty(path) ? new File(EscapeUtil.unescapeURL(path)) : null;
 
     }
 

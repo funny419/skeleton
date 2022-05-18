@@ -1,5 +1,9 @@
 package com.funny.utils;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -16,7 +20,7 @@ public class CollectionUtil {
 
 
     public static <E> ArrayList<E> createArrayList(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return new ArrayList<E>();
         }
 
@@ -31,24 +35,20 @@ public class CollectionUtil {
         }
 
         ArrayList<E> list = new ArrayList<E>();
-
         iterableToCollection(iter,list);
-
         list.trimToSize();
-
         return list;
     }
 
 
     @SafeVarargs
     public static <T,V extends T> ArrayList<T> createArrayList(V...args) {
-        if (args == null || args.length == 0) {
+        if (ArrayUtils.isEmpty(args)) {
             return new ArrayList<T>();
         }
 
         ArrayList<T> list = new ArrayList<T>(args.length);
         Collections.addAll(list,args);
-
         return list;
 
     }
@@ -60,7 +60,7 @@ public class CollectionUtil {
 
 
     public static <E> LinkedList<E> createLinkedList(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return new LinkedList<E>();
         }
 
@@ -70,9 +70,7 @@ public class CollectionUtil {
 
     public static <T> LinkedList<T> createLinkedList(Iterable<? extends T> c) {
         LinkedList<T> list = new LinkedList<T>();
-
         iterableToCollection(c,list);
-
         return list;
     }
 
@@ -81,7 +79,7 @@ public class CollectionUtil {
     public static <T,V extends T> LinkedList<T> createLinkedList(V...args) {
         LinkedList<T> list = new LinkedList<T>();
 
-        if (args != null) {
+        if (ArrayUtils.isNotEmpty(args)) {
             Collections.addAll(list,args);
         }
 
@@ -100,22 +98,22 @@ public class CollectionUtil {
 
 
     public static <E> HashSet<E> createHashSet(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return new HashSet<E>();
         }
+
         return new HashSet<E>(collection);
     }
 
 
     @SafeVarargs
     public static <E,O extends E> HashSet<E> createHashSet(O...args) {
-        if (args == null || args.length == 0) {
+        if (ArrayUtils.isEmpty(args)) {
             return new HashSet<E>();
         }
 
         HashSet<E> set = new HashSet<E>(args.length);
         Collections.addAll(set,args);
-
         return set;
     }
 
@@ -141,7 +139,7 @@ public class CollectionUtil {
 
     @SafeVarargs
     public static <T,V extends T> LinkedHashSet<T> createLinkedHashSet(V...args) {
-        if (args == null || args.length == 0) {
+        if (ArrayUtils.isEmpty(args)) {
             return new LinkedHashSet<T>();
         }
 
@@ -185,7 +183,7 @@ public class CollectionUtil {
     public static <T,V extends T> TreeSet<T> createTreeSet(Comparator<? super T> comparator,V...args) {
         TreeSet<T> set = new TreeSet<T>(comparator);
 
-        if (args != null) {
+        if (ArrayUtils.isNotEmpty(args)) {
             Collections.addAll(set,args);
         }
 
@@ -195,15 +193,13 @@ public class CollectionUtil {
 
     public static <T> TreeSet<T> createTreeSet(Comparator<? super T> comparator,Iterable<? extends T> c) {
         TreeSet<T> set = new TreeSet<T>(comparator);
-
         iterableToCollection(c,set);
-
         return set;
     }
 
 
     public static <E> TreeSet<E> createTreeSet(SortedSet<E> set) {
-        if (set == null) {
+        if (CollectionUtils.isEmpty(set)) {
             return new TreeSet<E>();
         }
 
@@ -252,7 +248,7 @@ public class CollectionUtil {
 
 
     public static <K,V> LinkedHashMap<K,V> createLinkedHashMap(Map<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return new LinkedHashMap<K,V>();
         }
 
@@ -266,7 +262,7 @@ public class CollectionUtil {
 
 
     public static <K,V> ConcurrentMap<K,V> createConcurrentMap(Map<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return null;
         }
 
@@ -285,7 +281,7 @@ public class CollectionUtil {
 
 
     private static <E> void iterableToCollection(Iterable<? extends E> iter,Collection<E> list) {
-        if (iter == null) {
+        if (IterableUtils.isEmpty(iter)) {
             return;
         }
 
@@ -296,7 +292,7 @@ public class CollectionUtil {
 
 
     public static <E extends Enum<E>> EnumSet<E> createEnumSet(Collection<E> c) {
-        if (c == null) {
+        if (CollectionUtils.isEmpty(c)) {
             return null;
         }
 
@@ -328,7 +324,7 @@ public class CollectionUtil {
 
 
     public static <K,V> TreeMap<K,V> createTreeMap(Map<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return null;
         }
 
@@ -337,7 +333,7 @@ public class CollectionUtil {
 
 
     public static <K,V> TreeMap<K,V> createTreeMap(SortedMap<K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return null;
         }
 
@@ -356,7 +352,7 @@ public class CollectionUtil {
 
 
     public static <K,V> WeakHashMap<K,V> createWeakHashMap(Map<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return new WeakHashMap<K,V>();
         }
 
@@ -380,7 +376,7 @@ public class CollectionUtil {
 
 
     public static <K,V> IdentityHashMap<K,V> createIdentityHashMap(Map<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return null;
         }
 
@@ -398,7 +394,7 @@ public class CollectionUtil {
 
 
     public static <K extends Enum<K>,V> EnumMap<K,V> createEnumMap(Map<K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return null;
         }
 
@@ -417,7 +413,7 @@ public class CollectionUtil {
 
 
     public static <E> PriorityQueue<E> createPriorityQueue(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return null;
         }
 
@@ -458,7 +454,7 @@ public class CollectionUtil {
 
 
     public static <E> ArrayDeque<E> createArrayDeque(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return null;
         }
 
@@ -496,7 +492,7 @@ public class CollectionUtil {
 
 
     public static <K,V> ConcurrentSkipListMap<K,V> createConcurrentSkipListMap(Map<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return new ConcurrentSkipListMap<K,V>();
         }
 
@@ -505,7 +501,7 @@ public class CollectionUtil {
 
 
     public static <K,V> ConcurrentSkipListMap<K,V> createConcurrentSkipListMap(SortedMap<? extends K,? extends V> map) {
-        if (map == null) {
+        if (MapUtils.isEmpty(map)) {
             return new ConcurrentSkipListMap<K,V>();
         }
 
@@ -519,7 +515,7 @@ public class CollectionUtil {
 
 
     public static <E> Queue<E> createConcurrentLinkedQueue(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return new ConcurrentLinkedQueue<E>();
         }
 
@@ -533,7 +529,7 @@ public class CollectionUtil {
 
 
     public static <E> CopyOnWriteArrayList<E> createCopyOnWriteArrayList(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return new CopyOnWriteArrayList<E>();
         }
 
@@ -542,7 +538,7 @@ public class CollectionUtil {
 
 
     public static <E> CopyOnWriteArrayList<E> createCopyOnWriteArrayList(E[] toCopyIn) {
-        if (toCopyIn == null) {
+        if (ArrayUtils.isEmpty(toCopyIn)) {
             return new CopyOnWriteArrayList<E>();
         }
 
@@ -571,7 +567,7 @@ public class CollectionUtil {
 
 
     public static <E> BlockingQueue<E> createLinkedBlockingQueue(Collection<? extends E> collection) {
-        if (collection == null) {
+        if (CollectionUtils.isEmpty(collection)) {
             return new LinkedBlockingQueue<E>();
         }
 
@@ -580,7 +576,6 @@ public class CollectionUtil {
 
 
     private static final class ArrayIterator<T> implements Iterator<T> {
-
         private final T[] items;
         private int ix = 0;
 

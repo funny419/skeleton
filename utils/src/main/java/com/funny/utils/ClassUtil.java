@@ -17,7 +17,6 @@ public class ClassUtil {
     private static final char RESOURCE_SEPARATOR_CHAR = '/';
     private static final char PACKAGE_SEPARATOR_CHAR = '.';
     public static final char INNER_CLASS_SEPARATOR_CHAR = '$';
-    public static final String INNER_CLASS_SEPARATOR = String.valueOf(INNER_CLASS_SEPARATOR_CHAR);
     private static final Map<Class<?>,TypeInfo> TYPE_MAP = Collections.synchronizedMap(new WeakHashMap<Class<?>,TypeInfo>());
     private static final Map<String,PrimitiveInfo<?>> PRIMITIVES = CollectionUtil.createHashMap();
 
@@ -101,7 +100,6 @@ public class ClassUtil {
         }
 
         PrimitiveInfo<T> info = (PrimitiveInfo<T>) PRIMITIVES.get(type.getName());
-
         if (info != null) {
             return info.defaultValue;
         }
@@ -344,22 +342,6 @@ public class ClassUtil {
     }
 
 
-    public static Class<?>[] getAllSuperclassesAsArray(Class<?> clazz) {
-        if (clazz == null) {
-            return null;
-        }
-
-        List<Class<?>> classes = CollectionUtil.createArrayList();
-        Class<?> superclass = clazz.getSuperclass();
-        while (superclass != null && superclass != Object.class) {
-            classes.add(superclass);
-            superclass = superclass.getSuperclass();
-        }
-
-        return classes.toArray(new Class<?>[0]);
-    }
-
-
     public static List<Class<?>> getAllInterfaces(Class<?> clazz) {
         if (clazz == null) {
             return null;
@@ -367,20 +349,7 @@ public class ClassUtil {
 
         List<Class<?>> interfacesFound = CollectionUtil.createArrayList();
         getAllInterfaces(clazz,interfacesFound);
-
         return interfacesFound;
-    }
-
-
-    public static Class<?>[] getAllInterfacesAsArray(Class<?> clazz) {
-        if (clazz == null) {
-            return null;
-        }
-
-        List<Class<?>> interfacesFound = CollectionUtil.createArrayList();
-        getAllInterfaces(clazz,interfacesFound);
-
-        return interfacesFound.toArray(new Class<?>[0]);
     }
 
 
@@ -518,7 +487,7 @@ public class ClassUtil {
             classes = Emptys.EMPTY_CLASS_ARRAY;
         }
 
-        for (int i = 0; i < fromClasses.length; i++) {
+        for (int i=0,cnt=fromClasses.length;i<cnt;i++) {
             if (!isAssignable(classes[i],fromClasses[i])) {
                 return false;
             }
@@ -859,7 +828,7 @@ public class ClassUtil {
         char[] chars = className.toCharArray();
         int lastDot = 0;
 
-        for (int i = 0; i < chars.length; i++) {
+        for (int i=0,cnt=chars.length;i<cnt;i++) {
             if (chars[i] == PACKAGE_SEPARATOR_CHAR) {
                 lastDot = i + 1;
             } else if (chars[i] == INNER_CLASS_SEPARATOR_CHAR) {

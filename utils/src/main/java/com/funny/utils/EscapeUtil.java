@@ -103,9 +103,9 @@ public class EscapeUtil {
 
                     default:
                         if (ch > 0xf) {
-                            out.append("\\u00" + Integer.toHexString(ch).toUpperCase());
+                            out.append("\\u00").append(Integer.toHexString(ch).toUpperCase());
                         } else {
-                            out.append("\\u000" + Integer.toHexString(ch).toUpperCase());
+                            out.append("\\u000").append(Integer.toHexString(ch).toUpperCase());
                         }
 
                     break;
@@ -180,7 +180,7 @@ public class EscapeUtil {
 
 
     private static String unescapeJavaStyleString(String str) throws IOException {
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return null;
         }
 
@@ -200,7 +200,7 @@ public class EscapeUtil {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
 
@@ -227,7 +227,7 @@ public class EscapeUtil {
 
                         needToChange = true;
                     } catch (NumberFormatException e) {
-                        out.append("\\u" + unicodeStr);
+                        out.append("\\u").append(unicodeStr);
                     }
                 }
 
@@ -296,7 +296,7 @@ public class EscapeUtil {
             }
 
             out.append(ch);
-        }
+        } // for end
 
         if (hadSlash) {
             out.append('\\');
@@ -327,7 +327,7 @@ public class EscapeUtil {
 
 
     public static String escapeEntities(Entities entities,String str) throws IOException {
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return null;
         }
 
@@ -367,7 +367,7 @@ public class EscapeUtil {
 
 
     public static String unescapeEntities(Entities entities,String str) throws IOException {
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return null;
         }
 
@@ -396,7 +396,7 @@ public class EscapeUtil {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
 
@@ -424,7 +424,7 @@ public class EscapeUtil {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return needToChange;
         }
 
@@ -496,7 +496,7 @@ public class EscapeUtil {
             } else {
                 out.append(ch);
             }
-        }
+        } // for end
 
         return needToChange;
     }
@@ -576,7 +576,7 @@ public class EscapeUtil {
         UNRESERVED.or(MARK);
     }
 
-    private static char[] HEXADECIMAL = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
+    private static final char[] HEXADECIMAL = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
 
     public static String escapeURL(String str) {
         try {
@@ -603,7 +603,7 @@ public class EscapeUtil {
     }
 
     private static String escapeURLInternal(String str,String encoding,boolean strict) throws Exception {
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return null;
         }
 
@@ -617,18 +617,17 @@ public class EscapeUtil {
     }
 
     private static boolean escapeURLInternal(String str,String encoding,Appendable out,boolean strict) throws IOException {
-        if (encoding == null) {
-            encoding = LocaleUtil.getContext().getCharset().name();
-        }
-
-        boolean needToChange = false;
-
         if (out == null) {
             throw new IllegalArgumentException("The Appendable must not be null");
         }
 
-        if (str == null) {
+        boolean needToChange = false;
+        if (StringUtils.isEmpty(str)) {
             return needToChange;
+        }
+
+        if (StringUtils.isEmpty(encoding)) {
+            encoding = LocaleUtil.getContext().getCharset().name();
         }
 
         char[] charArray = str.toCharArray();
@@ -688,7 +687,7 @@ public class EscapeUtil {
     }
 
     private static String unescapeURLInternal(String str,String encoding) throws Exception {
-        if (str == null) {
+        if (StringUtils.isEmpty(str)) {
             return null;
         }
 
@@ -702,15 +701,15 @@ public class EscapeUtil {
     }
 
     private static boolean unescapeURLInternal(String str,String encoding,Appendable out) throws IOException {
-        if (encoding == null) {
+        if (out == null) {
+            throw new IllegalArgumentException("The Appendable must not be null");
+        }
+
+        if (StringUtils.isEmpty(encoding)) {
             encoding = LocaleUtil.getContext().getCharset().name();
         }
 
         boolean needToChange = false;
-
-        if (out == null) {
-            throw new IllegalArgumentException("The Appendable must not be null");
-        }
 
         byte[] buffer = null;
         int pos = 0;
@@ -738,7 +737,6 @@ public class EscapeUtil {
                         break;
 
                     case '%':
-
                         if (i + 2 < length) {
                             try {
                                 byte b = (byte) Integer.parseInt(str.substring(i + 1,i + 3),16);
@@ -764,7 +762,6 @@ public class EscapeUtil {
 
             if (pos > 0) {
                 String s = new String(buffer,0,pos,encoding);
-
                 out.append(s);
 
                 if (!needToChange && !s.equals(new String(charArray,startIndex,pos))) {
@@ -774,18 +771,15 @@ public class EscapeUtil {
                 pos = 0;
             }
             out.append((char) ch);
-        }
+        } // for end
 
         if (pos > 0) {
             String s = new String(buffer,0,pos,encoding);
-
             out.append(s);
 
             if (!needToChange && !s.equals(new String(charArray,startIndex,pos))) {
                 needToChange = true;
             }
-
-            pos = 0;
         }
 
         return needToChange;

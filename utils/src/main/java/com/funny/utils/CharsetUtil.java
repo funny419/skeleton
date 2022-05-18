@@ -54,7 +54,7 @@ public class CharsetUtil {
     }
 
 
-    public static String getDefaultCharset() throws UnsupportedEncodingException {
+    public static String getDefaultCharset() {
         OutputStreamWriter writer = new OutputStreamWriter(new ByteArrayOutputStream(),StandardCharsets.UTF_8);
         return writer.getEncoding();
     }
