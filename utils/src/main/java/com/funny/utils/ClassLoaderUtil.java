@@ -1,9 +1,7 @@
 package com.funny.utils;
 
-
-import com.funny.utils.exception.ClassInstantiationException;
-import com.funny.utils.exception.ServiceNotFoundException;
 import com.funny.utils.helper.InOutStreamHelper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +16,8 @@ public class ClassLoaderUtil {
 
 
     public static String getClasspath() {
-        return ClassLoaderUtil.getResource("").getPath();
+        URL resource = ClassLoaderUtil.getResource("");
+        return (resource == null) ? null : resource.getPath();
     }
 
 
@@ -28,8 +27,7 @@ public class ClassLoaderUtil {
 
 
     public static <T> Class<T> loadClass(String className,Class<?> referrer) throws ClassNotFoundException {
-        ClassLoader classLoader = getReferrerClassLoader(referrer);
-        return loadClass(className,classLoader);
+        return loadClass(className,getReferrerClassLoader(referrer));
     }
 
 
@@ -38,12 +36,9 @@ public class ClassLoaderUtil {
             return null;
         }
 
-        if (classLoader == null) {
-            Class<T> clazz = (Class<T>) Class.forName(className);
-            return clazz;
-        }
-        Class<T> clazz = (Class<T>) Class.forName(className,true,classLoader);
-        return clazz;
+        return (classLoader == null) ?
+                (Class<T>) Class.forName(className) :
+                (Class<T>) Class.forName(className,true,classLoader);
     }
 
 
@@ -53,8 +48,7 @@ public class ClassLoaderUtil {
 
 
     public static <T> Class<T> loadServiceClass(String serviceId,Class<?> referrer) throws ClassNotFoundException {
-        ClassLoader classLoader = getReferrerClassLoader(referrer);
-        return loadServiceClass(serviceId,classLoader);
+        return loadServiceClass(serviceId,getReferrerClassLoader(referrer));
     }
 
 
@@ -66,9 +60,8 @@ public class ClassLoaderUtil {
         serviceId = "META-INF/services/" + serviceId;
 
         InputStream istream = getResourceAsStream(serviceId,classLoader);
-
         if (istream == null) {
-            throw new ServiceNotFoundException("Could not find " + serviceId);
+            throw new ClassNotFoundException("Could not find " + serviceId);
         }
 
         String serviceClassName;
@@ -76,7 +69,7 @@ public class ClassLoaderUtil {
         try {
             serviceClassName = StringUtils.trimToEmpty(InOutStreamHelper.readText(istream,"UTF-8",true));
         } catch (IOException e) {
-            throw new ServiceNotFoundException("Failed to load " + serviceId,e);
+            throw new ClassNotFoundException("Failed to load " + serviceId,e);
         }
 
         return ClassLoaderUtil.loadClass(serviceClassName,classLoader);
@@ -89,19 +82,12 @@ public class ClassLoaderUtil {
 
 
     public static <T> Class<T> loadServiceClass(String className,String serviceId,Class<T> referrer) throws ClassNotFoundException {
-        ClassLoader classLoader = getReferrerClassLoader(referrer);
-        return loadServiceClass(className,serviceId,classLoader);
+        return loadServiceClass(className,serviceId,getReferrerClassLoader(referrer));
     }
 
 
     public static <T> Class<T> loadServiceClass(String className,String serviceId,ClassLoader classLoader) throws ClassNotFoundException {
-        try {
-            if (StringUtils.isNotBlank(className)) {
-                return loadClass(className,classLoader);
-            }
-        } catch (ClassNotFoundException ignore) {}
-
-        return loadServiceClass(serviceId,classLoader);
+        return StringUtils.isNotBlank(className) ? loadClass(className,classLoader) : loadServiceClass(serviceId,classLoader);
     }
 
 
@@ -115,88 +101,69 @@ public class ClassLoaderUtil {
     }
 
 
-    public static <T> T newInstance(String className) throws ClassNotFoundException,ClassInstantiationException {
-        Class<T> clazz = loadClass(className);
-        return newInstance(clazz);
+    public static <T> T newInstance(String className) throws ClassNotFoundException {
+        return newInstance(loadClass(className));
     }
 
 
-    public static Object newInstance(String className,Class<?> referrer) throws ClassNotFoundException,ClassInstantiationException {
+    public static Object newInstance(String className,Class<?> referrer) throws ClassNotFoundException {
         return newInstance(loadClass(className,referrer));
     }
 
 
-    public static Object newInstance(String className,ClassLoader classLoader) throws ClassNotFoundException,
-            ClassInstantiationException {
+    public static Object newInstance(String className,ClassLoader classLoader) throws ClassNotFoundException {
         return newInstance(loadClass(className,classLoader));
     }
 
 
-    public static <T> T newInstance(Class<T> clazz) throws ClassInstantiationException {
+    public static <T> T newInstance(Class<T> clazz) throws ClassNotFoundException {
         if (clazz == null) {
             return null;
         }
 
         try {
-            return clazz.newInstance();
+            return (T) clazz;
         } catch (Exception e) {
-            throw new ClassInstantiationException(clazz,"Failed to instantiate class: " + clazz.getName(),e);
+            throw new ClassNotFoundException("Failed to instantiate class: " + clazz.getName());
         }
     }
 
 
-    public static <T> T newServiceInstance(String serviceId) throws ClassNotFoundException,ClassInstantiationException {
-        Class<T> clazz = loadServiceClass(serviceId);
-
-        return newInstance(clazz);
+    public static <T> T newServiceInstance(String serviceId) throws ClassNotFoundException {
+        return newInstance(loadServiceClass(serviceId));
     }
 
 
-    public static <T> T newServiceInstance(String serviceId,Class<T> referrer) throws ClassNotFoundException,
-            ClassInstantiationException {
-        Class<T> clazz = loadServiceClass(serviceId,referrer);
-
-        return newInstance(clazz);
+    public static <T> T newServiceInstance(String serviceId,Class<T> referrer) throws ClassNotFoundException {
+        return newInstance(loadServiceClass(serviceId,referrer));
     }
 
 
-    public static <T> T newServiceInstance(String serviceId,ClassLoader classLoader) throws ClassNotFoundException,
-            ClassInstantiationException {
-        Class<T> clazz = loadServiceClass(serviceId,classLoader);
-
-        return newInstance(clazz);
+    public static <T> T newServiceInstance(String serviceId,ClassLoader classLoader) throws ClassNotFoundException {
+        return newInstance(loadServiceClass(serviceId,classLoader));
     }
 
 
-    public static <T> T newServiceInstance(String className,String serviceId) throws ClassNotFoundException,
-            ClassInstantiationException {
-        Class<T> clazz = loadServiceClass(className,serviceId);
-
-        return newInstance(clazz);
+    public static <T> T newServiceInstance(String className,String serviceId) throws ClassNotFoundException {
+        return newInstance(loadServiceClass(className,serviceId));
     }
 
 
-    public static <T> T newServiceInstance(String className,String serviceId,Class<T> referrer)
-            throws ClassNotFoundException,ClassInstantiationException {
-        Class<T> clazz = loadServiceClass(className,serviceId,referrer);
-
-        return newInstance(clazz);
+    public static <T> T newServiceInstance(String className,String serviceId,Class<T> referrer) throws ClassNotFoundException {
+        return newInstance(loadServiceClass(className,serviceId,referrer));
     }
 
 
-    public static <T> T newServiceInstance(String className,String serviceId,ClassLoader classLoader)
-            throws ClassNotFoundException,ClassInstantiationException {
-        Class<T> clazz = loadServiceClass(className,serviceId,classLoader);
-
-        return newInstance(clazz);
+    public static <T> T newServiceInstance(String className,String serviceId,ClassLoader classLoader) throws ClassNotFoundException {
+        return newInstance(loadServiceClass(className,serviceId,classLoader));
     }
 
 
     public static URL[] getResources(String resourceName) {
         List<URL> urls = new ArrayList<>();
         boolean found = false;
-
         found = getResources(urls,resourceName,getContextClassLoader(),false);
+
         if (!found) {
             getResources(urls,resourceName,ClassLoaderUtil.class.getClassLoader(),false);
         }
@@ -210,9 +177,8 @@ public class ClassLoaderUtil {
 
 
     public static URL[] getResources(String resourceName,Class<?> referrer) {
-        ClassLoader classLoader = getReferrerClassLoader(referrer);
         List<URL> urls = new ArrayList<>();
-
+        ClassLoader classLoader = getReferrerClassLoader(referrer);
         getResources(urls,resourceName,classLoader,classLoader == null);
         return getDistinctURLs(urls);
     }
@@ -220,26 +186,30 @@ public class ClassLoaderUtil {
 
     public static URL[] getResources(String resourceName,ClassLoader classLoader) {
         List<URL> urls = new ArrayList<>();
-
         getResources(urls,resourceName,classLoader,classLoader == null);
         return getDistinctURLs(urls);
     }
 
-    private static boolean getResources(List<URL> urlSet,String resourceName,ClassLoader classLoader,
-                                        boolean sysClassLoader) {
+
+    private static boolean getResources(List<URL> urlSet,String resourceName,ClassLoader classLoader,boolean sysClassLoader) {
         if (StringUtils.isBlank(resourceName)) {
             return false;
         }
 
         Enumeration<URL> enums = null;
-
         try {
             if (classLoader != null) {
                 enums = classLoader.getResources(resourceName);
             } else if (sysClassLoader) {
                 enums = ClassLoader.getSystemResources(resourceName);
             }
-        } catch (IOException ignore) {}
+        } catch (IOException e) {
+            return false;
+        }
+
+        if (enums == null || !enums.hasMoreElements()) {
+            return false;
+        }
 
         while (enums.hasMoreElements()) {
             urlSet.add(enums.nextElement());
@@ -248,13 +218,13 @@ public class ClassLoaderUtil {
         return true;
     }
 
+
     private static URL[] getDistinctURLs(List<URL> urls) {
-        if (urls == null || urls.size() == 0) {
+        if (CollectionUtils.isEmpty(urls)) {
             return new URL[0];
         }
 
         Set<URL> urlSet = CollectionUtil.createHashSet();
-
         for (Iterator<URL> i = urls.iterator(); i.hasNext();) {
             URL url = i.next();
 
@@ -265,12 +235,12 @@ public class ClassLoaderUtil {
             }
         }
 
-        return urls.toArray(new URL[urls.size()]);
+        return urls.toArray(new URL[urlSet.size()]);
     }
 
 
     public static URL getResource(String resourceName) {
-        if (resourceName == null) {
+        if (StringUtils.isEmpty(resourceName)) {
             return null;
         }
 
@@ -285,7 +255,6 @@ public class ClassLoaderUtil {
         }
 
         classLoader = ClassLoaderUtil.class.getClassLoader();
-
         if (classLoader != null) {
             url = classLoader.getResource(resourceName);
 
@@ -299,12 +268,11 @@ public class ClassLoaderUtil {
 
 
     public static URL getResource(String resourceName,Class<?> referrer) {
-        if (resourceName == null) {
+        if (StringUtils.isEmpty(resourceName)) {
             return null;
         }
 
         ClassLoader classLoader = getReferrerClassLoader(referrer);
-
         return (classLoader == null) ?
                 ClassLoaderUtil.class.getClassLoader().getResource(resourceName) :
                 classLoader.getResource(resourceName);
@@ -312,7 +280,7 @@ public class ClassLoaderUtil {
 
 
     public static URL getResource(String resourceName,ClassLoader classLoader) {
-        if (StringUtils.isBlank(resourceName)) {
+        if (StringUtils.isEmpty(resourceName)) {
             return null;
         }
 
@@ -324,12 +292,11 @@ public class ClassLoaderUtil {
 
     public static InputStream getResourceAsStream(String resourceName) {
         URL url = getResource(resourceName);
-
         try {
             if (url != null) {
                 return url.openStream();
             }
-        } catch (IOException ignore) {}
+        } catch (IOException ignored) {}
 
         return null;
     }
@@ -337,12 +304,11 @@ public class ClassLoaderUtil {
 
     public static InputStream getResourceAsStream(String resourceName,Class<?> referrer) {
         URL url = getResource(resourceName,referrer);
-
         try {
             if (url != null) {
                 return url.openStream();
             }
-        } catch (IOException ignore) {}
+        } catch (IOException ignored) {}
 
         return null;
     }
@@ -350,28 +316,27 @@ public class ClassLoaderUtil {
 
     public static InputStream getResourceAsStream(String resourceName,ClassLoader classLoader) {
         URL url = getResource(resourceName,classLoader);
-
         try {
             if (url != null) {
                 return url.openStream();
             }
-        } catch (IOException ignore) {}
+        } catch (IOException ignored) {}
 
         return null;
     }
 
 
-    public static URL[] whichClasses(String className) {
+    public static URL[] whichClasses(String className) throws IOException {
         return getResources(ClassUtil.getClassNameAsResource(className));
     }
 
 
-    public static <T> URL[] whichClasses(String className,Class<T> referrer) {
+    public static <T> URL[] whichClasses(String className,Class<T> referrer) throws IOException {
         return getResources(ClassUtil.getClassNameAsResource(className),referrer);
     }
 
 
-    public static URL[] whichClasses(String className,ClassLoader classLoader) {
+    public static URL[] whichClasses(String className,ClassLoader classLoader) throws IOException {
         return getResources(ClassUtil.getClassNameAsResource(className),classLoader);
     }
 

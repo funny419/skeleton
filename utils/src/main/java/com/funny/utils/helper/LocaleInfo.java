@@ -73,17 +73,21 @@ public final class LocaleInfo implements Cloneable,Externalizable,Serializable {
         }
     }
 
+
     public Locale getLocale() {
         return locale;
     }
+
 
     public Charset getCharset() {
         return charset;
     }
 
+
     public boolean isCharsetSupported() {
         return !(charset instanceof UnknownCharset);
     }
+
 
     public LocaleInfo assertCharsetSupported() throws UnsupportedCharsetException {
         if (charset instanceof UnknownCharset) {
@@ -92,6 +96,7 @@ public final class LocaleInfo implements Cloneable,Externalizable,Serializable {
 
         return this;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -112,10 +117,12 @@ public final class LocaleInfo implements Cloneable,Externalizable,Serializable {
         return locale.equals(otherLocaleInfo.locale) && charset.equals(otherLocaleInfo.charset);
     }
 
+
     @Override
     public int hashCode() {
         return charset.hashCode() * 31 + locale.hashCode();
     }
+
 
     @Override
     public Object clone() {
@@ -126,9 +133,11 @@ public final class LocaleInfo implements Cloneable,Externalizable,Serializable {
         }
     }
 
+
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(toString());
     }
+
 
     public void readExternal(ObjectInput in) throws IOException {
         LocaleInfo info = parse(in.readUTF());
@@ -137,25 +146,30 @@ public final class LocaleInfo implements Cloneable,Externalizable,Serializable {
         charset = info.getCharset();
     }
 
+
     @Override
     public String toString() {
         return locale + ":" + charset;
     }
+
 
     static class UnknownCharset extends Charset {
         public UnknownCharset(String name) {
             super(name,null);
         }
 
+
         @Override
         public boolean contains(Charset cs) {
             return false;
         }
 
+
         @Override
         public CharsetDecoder newDecoder() {
             throw new UnsupportedOperationException("Could not create decoder for unknown charset: " + name());
         }
+
 
         @Override
         public CharsetEncoder newEncoder() {

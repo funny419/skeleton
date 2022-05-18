@@ -19,10 +19,12 @@ public class FastByteBuffer {
         this.minChunkLen = 1024;
     }
 
+
     public FastByteBuffer(int size) {
         Assert.assertTrue("Invalid size",size >= 0);
         this.minChunkLen = size;
     }
+
 
     private void needNewBuffer(int newSize) {
         int delta = newSize - size;

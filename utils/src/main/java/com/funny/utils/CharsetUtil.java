@@ -1,5 +1,7 @@
 package com.funny.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -33,7 +35,7 @@ public class CharsetUtil {
 
 
     public static String changeCharset(String str,String charset) throws UnsupportedEncodingException {
-        if (str != null) {
+        if (StringUtils.isNotEmpty(str)) {
             byte[] bytes = str.getBytes();
             return new String(bytes,charset);
         }
@@ -43,7 +45,7 @@ public class CharsetUtil {
 
 
     public static String changeCharset(String str,String beforeCharset,String afterCharset) throws UnsupportedEncodingException {
-        if (str != null) {
+        if (StringUtils.isNotEmpty(str)) {
             byte[] bytes = str.getBytes(beforeCharset);
             return new String(bytes,afterCharset);
         }

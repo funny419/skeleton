@@ -56,7 +56,7 @@ public class DateConverter extends TypeAdapter<Date> {
         Date date = null;
         try {
             date = new SimpleDateFormat(pattern).parse(json);
-        } catch (ParseException ignore) {}
+        } catch (ParseException ignored) {}
 
         return date;
     }

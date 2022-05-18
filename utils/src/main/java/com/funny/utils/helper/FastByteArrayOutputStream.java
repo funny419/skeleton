@@ -31,14 +31,11 @@ public class FastByteArrayOutputStream extends OutputStream {
         return buffer.size();
     }
 
-    @Override
-    public void close() {
-        // nop
-    }
 
     public void reset() {
         buffer.reset();
     }
+
 
     public void writeTo(OutputStream out) throws IOException {
         int index = buffer.index();
@@ -49,14 +46,17 @@ public class FastByteArrayOutputStream extends OutputStream {
         out.write(buffer.array(index),0,buffer.offset());
     }
 
+
     public byte[] toByteArray() {
         return buffer.toArray();
     }
+
 
     @Override
     public String toString() {
         return new String(toByteArray());
     }
+
 
     public String toString(String enc) throws UnsupportedEncodingException {
         return new String(toByteArray(),enc);

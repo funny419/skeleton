@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
+/**
+ * Converter를 편하게 사용하라고 만들었으나 성능적으로 과연 맞는지 확신이 들지 않음...
+ */
 public class ConverterUtil {
     public static final double HUNDRED = 100.0D;
     public static final double ZERO = 0.0D;

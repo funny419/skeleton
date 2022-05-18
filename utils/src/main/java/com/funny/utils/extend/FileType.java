@@ -1,12 +1,10 @@
 package com.funny.utils.extend;
 
-import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 
-@Slf4j
 public class FileType {
     public final static Map<String,String> FILE_TYPE_MAP = new HashMap<String,String>();
 

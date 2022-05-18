@@ -11,7 +11,7 @@ public class IntHashMap<T> {
     private Entry<T>[] table;
     private int count;
     private int threshold;
-    private float loadFactor;
+    private final float loadFactor;
 
     public IntHashMap() {
         this(DEFAULT_INITIAL_CAPACITY,DEFAULT_LOAD_FACTOR);
@@ -59,11 +59,10 @@ public class IntHashMap<T> {
 
     public boolean containsKey(int key) {
         Entry<T>[] tab = table;
-        int hash = key;
-        int index = (hash & 0x7FFFFFFF) % tab.length;
+        int index = (key & 0x7FFFFFFF) % tab.length;
 
         for (Entry<T> e = tab[index]; e != null; e = e.next) {
-            if (e.hash == hash) {
+            if (e.hash == key) {
                 return true;
             }
         }
@@ -91,11 +90,10 @@ public class IntHashMap<T> {
 
     public T get(int key) {
         Entry<T>[] tab = table;
-        int hash = key;
-        int index = (hash & 0x7FFFFFFF) % tab.length;
+        int index = (key & 0x7FFFFFFF) % tab.length;
 
         for (Entry<T> e = tab[index]; e != null; e = e.next) {
-            if (e.hash == hash) {
+            if (e.hash == key) {
                 return e.value;
             }
         }
@@ -106,11 +104,10 @@ public class IntHashMap<T> {
 
     public T put(int key,T value) {
         Entry<T>[] tab = table;
-        int hash = key;
-        int index = (hash & 0x7FFFFFFF) % tab.length;
+        int index = (key & 0x7FFFFFFF) % tab.length;
 
         for (Entry<T> e = tab[index]; e != null; e = e.next) {
-            if (e.hash == hash) {
+            if (e.hash == key) {
                 T old = e.value;
 
                 e.value = value;
@@ -122,10 +119,10 @@ public class IntHashMap<T> {
             rehash();
 
             tab = table;
-            index = (hash & 0x7FFFFFFF) % tab.length;
+            index = (key & 0x7FFFFFFF) % tab.length;
         }
 
-        Entry<T> e = new Entry<T>(hash,key,value,tab[index]);
+        Entry<T> e = new Entry<T>(key,key,value,tab[index]);
 
         tab[index] = e;
         count++;
@@ -136,11 +133,10 @@ public class IntHashMap<T> {
 
     public T remove(int key) {
         Entry<T>[] tab = table;
-        int hash = key;
-        int index = (hash & 0x7FFFFFFF) % tab.length;
+        int index = (key & 0x7FFFFFFF) % tab.length;
 
         for (Entry<T> e = tab[index],prev = null; e != null; prev = e,e = e.next) {
-            if (e.hash == hash) {
+            if (e.hash == key) {
                 if (prev != null) {
                     prev.next = e.next;
                 } else {
