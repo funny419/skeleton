@@ -3,8 +3,6 @@ package com.funny.utils.convert;
 import com.funny.utils.ClassLoaderUtil;
 import com.funny.utils.CollectionUtil;
 import com.funny.utils.PackageUtil;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,14 +30,14 @@ public class ObjectConverter<T> {
 
 
 
-    private static void init() throws IOException,ClassNotFoundException,InstantiationException,IllegalAccessException {
+    private static void init() throws Exception {
         String packageName = PackageUtil.getPackage(ObjectConverter.class).getName() + ".*";
         List<String> classNames = PackageUtil.getClassesInPackage(packageName);
 
         for (String classname : classNames) {
             Class<?> clazz = ClassLoaderUtil.loadClass(classname);
             if (clazz.getAnnotation(TypeConverter.Convert.class) != null) {
-                clazz.newInstance();
+                clazz.getDeclaredConstructor().newInstance();
             }
         }
     }
