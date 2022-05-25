@@ -31,7 +31,7 @@ import static com.funny.utils.constants.ExcelEntity.*;
 
 
 public class ExcelUtil {
-    public static <T> List<T> singleParseToList(InputStream inputStream, @NonNull Class<T> source) throws IOException {
+    public static <T> List<T> singleParseToList(InputStream inputStream,@NonNull Class<T> source) throws IOException {
         Workbook workbook = WorkbookFactory.create(inputStream);
         return singleParseToList(workbook,source);
     }
@@ -39,6 +39,7 @@ public class ExcelUtil {
 
     public static <T> List<T> singleParseToList(@NonNull Workbook workbook,@NonNull Class<T> source) {
         validateObject(workbook,source);
+
         ExcelImport excelImport = source.getAnnotation(ExcelImport.class);
         if (Objects.isNull(excelImport)) {
             throw new UnsupportedOperationException("NOT SUPPORT EXCEL IMPORT");
@@ -68,12 +69,18 @@ public class ExcelUtil {
         }
 
         int[] startRowIndexes = excelImport.startRowIndexes();
-        sheetIndexs = ArrayUtils.isEmpty(startRowIndexes) ? new int[1] : startRowIndexes;
+        startRowIndexes = ArrayUtils.isEmpty(startRowIndexes) ? new int[1] : startRowIndexes;
         return parseSheetToList(sheets,startRowIndexes,source).get(0);
     }
 
 
-    public static <T> List<List<T>> parstToList(@NonNull Workbook workbook,@NonNull Class<T> source) {
+    public static <T> List<List<T>> parseToList(InputStream inputStream,Class<T> source) throws IOException {
+        Workbook workbook = WorkbookFactory.create(inputStream);
+        return parseToList(workbook,source);
+    }
+
+
+    public static <T> List<List<T>> parseToList(@NonNull Workbook workbook,@NonNull Class<T> source) {
         validateObject(workbook,source);
 
         ExcelImport excelImport = source.getAnnotation(ExcelImport.class);
@@ -126,9 +133,7 @@ public class ExcelUtil {
                     .collect(Collectors.toList());
 
             int maxIndex = fieldList.stream()
-                                    .mapToInt(item -> item.getAnnotation(SheetColumn.class).index())
-                                    .max()
-                                    .getAsInt();
+                                    .mapToInt(item -> item.getAnnotation(SheetColumn.class).index()).max().getAsInt();
 
             Row row;
             Cell cell;
@@ -140,8 +145,8 @@ public class ExcelUtil {
 
                 try {
                     T instance = source.getDeclaredConstructor().newInstance();
-                    int currentIndex = maxIndex;
 
+                    int currentIndex = maxIndex;
                     for (Field field : fieldList) {
                         SheetColumn sheetColumn = field.getAnnotation(SheetColumn.class);
                         int index = sheetColumn.index();
@@ -149,10 +154,10 @@ public class ExcelUtil {
                             continue;
                         }
 
-                        cell = index == -1 ? row.getCell(++currentIndex) : row.getCell(index);
-
                         field.setAccessible(true);
+                        cell = index == -1 ? row.getCell(++currentIndex) : row.getCell(index);
                         Object value = TypeUtils.cast(getCellValue(cell),field.getType(),null);
+
                         field.set(instance,value);
                     }
                 } catch (Exception e) {
@@ -219,7 +224,7 @@ public class ExcelUtil {
     }
 
 
-    public static <T> void singleListToStream(List<T> dataList, @NonNull OutputStream outputStream,@NonNull Class<T> source,List<ExcelData> excelDataList) {
+    public static <T> void singleListToStream(List<T> dataList,@NonNull OutputStream outputStream,@NonNull Class<T> source,List<ExcelData> excelDataList) {
         listToStream(Collections.singletonList(dataList),outputStream,source,excelDataList);
     }
 
@@ -260,20 +265,23 @@ public class ExcelUtil {
             throw new IllegalArgumentException("CLASS TYPE NOT SUPPORT EXCEL EXPORT");
         }
 
-        int excelDataListSize = excelDataList.size();
+        int excelDataListSize = CollectionUtils.isEmpty(excelDataList) ? 0 : excelDataList.size();
         String[] sheetNames = ConverterUtil.copyNewArray(excelExport.sheetNames(),excelDataListSize);
+
         boolean[] isHiddenSheets = ConverterUtil.copyNewArray(excelExport.isIncludeHeaders(),excelDataListSize);
         boolean[] inCludeHeaders = ConverterUtil.copyNewArray(excelExport.isIncludeHeaders(),excelDataListSize);
+
         int[] startRowIndexes = ConverterUtil.copyNewArray(excelExport.startRowIndexes(),excelDataListSize);
         short[] startColumnIndexes = ConverterUtil.copyNewArray(excelExport.startColumnIndexes(),excelDataListSize);
 
         Workbook workbook = ExcelEntity.EXCEL_XLS.equals(excelExport.fileType()) ? new HSSFWorkbook() : new XSSFWorkbook();
 
-        int i=0,sheetIndex=1;
-        List<T> resultList;
-        Sheet sheet;
         Row row;
         Cell cell;
+        Sheet sheet;
+
+        int i=0,sheetIndex=1;
+        List<T> resultList;
 
         Iterator<List<T>> iterator = dataList.iterator();
         while(iterator.hasNext()) {
@@ -348,6 +356,8 @@ public class ExcelUtil {
 
             i++;
         } // while end
+
+        createDropDownList(workbook,excelDataList);
 
         return workbook;
     }
@@ -433,7 +443,7 @@ public class ExcelUtil {
         int validSize = excelDataList.stream()
                 .filter(excelData -> ArrayUtils.isNotEmpty(excelData.getValues()))
                 .map(ExcelData::generateUniqueKey)
-                .collect(Collectors.toList()).size();
+                .collect(Collectors.toSet()).size();
 
         if (validSize > 3) {
             dropDownListWithHiddenSheet(workbook,excelDataList);
@@ -441,9 +451,7 @@ public class ExcelUtil {
         }
 
         int maxLength = excelDataList.stream()
-                        .mapToInt(item -> calStringArrayTotalLength(item.getValues()))
-                        .max()
-                        .orElse(0);
+                        .mapToInt(item -> calStringArrayTotalLength(item.getValues())).max().orElse(0);
 
         if (maxLength > 256 - 1) {
             dropDownListWithHiddenSheet(workbook,excelDataList);

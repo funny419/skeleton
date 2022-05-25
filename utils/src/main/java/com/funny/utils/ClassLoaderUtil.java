@@ -121,7 +121,7 @@ public class ClassLoaderUtil {
         }
 
         try {
-            return (T) clazz;
+            return (T) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new ClassNotFoundException("Failed to instantiate class: " + clazz.getName());
         }
