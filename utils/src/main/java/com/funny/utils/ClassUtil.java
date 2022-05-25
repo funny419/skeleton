@@ -847,4 +847,9 @@ public class ClassUtil {
 
         return getShortClassName(clazz.getName());
     }
+
+
+    private ClassUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

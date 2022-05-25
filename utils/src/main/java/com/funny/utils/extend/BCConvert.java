@@ -16,7 +16,7 @@ public class BCConvert {
 
 
 
-    public static String bjToqj(String input) {
+    public static String toFullWidthCharacter(String input) {
         if (StringUtils.isEmpty(input)) {
             return "";
         }
@@ -38,7 +38,7 @@ public class BCConvert {
     }
 
 
-    public static String qjTobj(String input) {
+    public static String toHalfWidthCharacter(String input) {
         if (StringUtils.isEmpty(input)) {
             return "";
         }

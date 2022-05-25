@@ -1,4 +1,4 @@
-package com.funny.utils.extend;
+package com.funny.utils.constants;
 
 import java.io.*;
 import java.util.HashMap;

@@ -1091,4 +1091,9 @@ public class DateUtil {
 
         return age;
     }
+
+
+    private DateUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

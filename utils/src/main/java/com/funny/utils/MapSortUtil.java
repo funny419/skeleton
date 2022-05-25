@@ -24,4 +24,9 @@ public class MapSortUtil {
             return o1.getValue() - o2.getValue();
         }
     }
+
+
+    private MapSortUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

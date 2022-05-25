@@ -1,11 +1,14 @@
-package com.funny.utils.helper;
+package com.funny.utils;
 
 import com.funny.utils.constants.IOConstant;
+import com.funny.utils.helper.ByteArray;
+import com.funny.utils.helper.ByteArrayOutputStream;
+import com.funny.utils.helper.FastByteArrayOutputStream;
 
 import java.io.*;
 
 
-public class InOutStreamHelper {
+public class InOutStreamUtil {
     public static void io(InputStream in,OutputStream out) throws IOException {
         io(in,out,-1);
     }
@@ -173,6 +176,59 @@ public class InOutStreamHelper {
     }
 
 
+    public static String streamToString(InputStream input) throws Exception {
+        byte[] bytes = new byte[4096];
+        StringBuilder result = new StringBuilder();
+
+        for (int n; (n = input.read(bytes)) != -1;) {
+            result.append(new String(bytes,0,n));
+        }
+
+        return result.toString();
+    }
+
+
+    public static byte[] streamToByte(InputStream input) throws Exception {
+        byte[] bytes = new byte[1024];
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+
+        int len = 0;
+        while ((len = input.read(bytes,0,bytes.length)) != -1) {
+            baos.write(bytes,0,len);
+        }
+
+        return baos.toByteArray();
+    }
+
+
+    public static byte[] inputStreamToByte(InputStream input) throws Exception {
+        int count = 0;
+        while (count == 0) {
+            count = input.available();
+        }
+
+        byte[] bytes = new byte[count];
+        input.read(bytes);
+        return bytes;
+    }
+
+
+    public static InputStream byteToInputStream(byte[] bytes) throws Exception {
+        return new ByteArrayInputStream(bytes);
+    }
+
+
+    public static void streamSaveAsFile(InputStream input,File file) throws Exception {
+        byte[] buffer = new byte[1024];
+        FileOutputStream fos = new FileOutputStream(file);
+
+        int len;
+        while ((len = input.read(buffer)) > 0) {
+            fos.write(buffer,0,len);
+        }
+    }
+
+
     public static OutputStream synchronizedOutputStream(OutputStream out) {
         return new SynchronizedOutputStream(out);
     }
@@ -225,27 +281,27 @@ public class InOutStreamHelper {
 
 
     public static ByteArray readBytes(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        com.funny.utils.helper.ByteArrayOutputStream out = new com.funny.utils.helper.ByteArrayOutputStream();
         io(in,out);
         return out.toByteArray();
     }
 
 
     public static ByteArray readBytes(InputStream in,boolean closeIn) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        com.funny.utils.helper.ByteArrayOutputStream out = new com.funny.utils.helper.ByteArrayOutputStream();
         io(in,out,closeIn,true);
         return out.toByteArray();
     }
 
     public static ByteArray readBytes(File file) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        com.funny.utils.helper.ByteArrayOutputStream out = new com.funny.utils.helper.ByteArrayOutputStream();
         io(new FileInputStream(file),out);
         return out.toByteArray();
     }
 
 
     public static ByteArray readBytes(File file,boolean closeIn) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        com.funny.utils.helper.ByteArrayOutputStream out = new ByteArrayOutputStream();
         io(new FileInputStream(file),out,closeIn,true);
         return out.toByteArray();
     }
@@ -366,5 +422,10 @@ public class InOutStreamHelper {
                 out.close();
             }
         }
+    }
+
+
+    private InOutStreamUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

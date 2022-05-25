@@ -86,4 +86,9 @@ public class CheckUtil {
     public static boolean isValidMaxNumber(final long value, final long max) {
         return value <= max;
     }
+
+
+    private CheckUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

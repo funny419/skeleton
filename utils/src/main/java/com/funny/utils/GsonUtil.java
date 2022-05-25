@@ -8,11 +8,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.HashMap;
@@ -115,7 +115,7 @@ public class GsonUtil {
 
     public static void printJsonObject(HttpServletResponse response,Object obj) {
         if (obj == null) {
-            throw new NullPointerException("JSON NULL");
+            throw new NullPointerException();
         }
 
         if (obj instanceof String) {
@@ -137,27 +137,27 @@ public class GsonUtil {
 
     private static void validateJsonObject(Object obj) {
         if (obj == null) {
-            throw new NullPointerException("JSON NULL POINT");
+            throw new NullPointerException();
         }
 
         if (obj instanceof String || obj instanceof Number || obj instanceof Boolean) {
-            throw new RuntimeException("JSON RUNTIME EXCEPTION");
+            throw new InvalidParameterException();
         }
     }
 
 
     public static <T> T wrapDataToEntity(HttpServletRequest request,Class<T> clazz,String... excludeFields) {
         if (request == null || clazz == null) {
-            throw new InvalidParameterException("ERROR");
+            throw new NullPointerException();
         }
 
         String data = null;
         try {
-            data = IOUtils.toString(request.getInputStream(),"utf-8");
+            data = IOUtils.toString(request.getInputStream(),StandardCharsets.UTF_8);
         } catch (IOException ignored) {}
 
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Date.class,new DateConverter());
+        builder.registerTypeAdapter(Date.class,new DateConverter(StandardCharsets.UTF_8.name()));
 
         if (ArrayUtils.isNotEmpty(excludeFields)) {
             GsonExclusion exclusions = new GsonExclusion();
@@ -172,5 +172,10 @@ public class GsonUtil {
 
     public static void printSuccess(HttpServletResponse response) {
         printJson(response,"success",true);
+    }
+
+
+    private GsonUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

@@ -284,4 +284,9 @@ public final class CharUtil {
 
         return c;
     }
+
+
+    private CharUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

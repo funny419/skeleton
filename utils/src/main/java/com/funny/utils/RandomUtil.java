@@ -155,4 +155,9 @@ public class RandomUtil {
 
         return ConverterUtil.toCharacter(getRandom().nextInt(y-x+1)+x);
     }
+
+
+    private RandomUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

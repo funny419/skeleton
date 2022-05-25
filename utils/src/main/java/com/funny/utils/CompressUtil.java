@@ -50,12 +50,17 @@ public class CompressUtil {
 
 
     public static String compressEncode(final String source) throws IOException {
-        return Base64Utils.encodeToString(CompressUtil.compress(source));
+        return Base64Utils.encodeToString(compress(source));
     }
 
 
     public static String decompressDecode(final String compressedEncodeValue) throws IOException, DataFormatException {
         byte[] data = Base64Utils.decodeFromString(compressedEncodeValue);
-        return new String(CompressUtil.decompress(data));
+        return new String(decompress(data));
+    }
+
+
+    private CompressUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

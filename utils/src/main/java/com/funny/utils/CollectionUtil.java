@@ -658,4 +658,9 @@ public class CollectionUtil {
             throw new UnsupportedOperationException("Cannot delete from an array");
         }
     }
+
+
+    private CollectionUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

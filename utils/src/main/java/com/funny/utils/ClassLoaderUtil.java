@@ -1,6 +1,5 @@
 package com.funny.utils;
 
-import com.funny.utils.helper.InOutStreamHelper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
@@ -67,7 +66,7 @@ public class ClassLoaderUtil {
         String serviceClassName;
 
         try {
-            serviceClassName = StringUtils.trimToEmpty(InOutStreamHelper.readText(istream,"UTF-8",true));
+            serviceClassName = StringUtils.trimToEmpty(InOutStreamUtil.readText(istream,"UTF-8",true));
         } catch (IOException e) {
             throw new ClassNotFoundException("Failed to load " + serviceId,e);
         }
@@ -353,5 +352,10 @@ public class ClassLoaderUtil {
 
     public static URL whichClass(String className,ClassLoader classLoader) {
         return getResource(ClassUtil.getClassNameAsResource(className),classLoader);
+    }
+
+
+    private ClassLoaderUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

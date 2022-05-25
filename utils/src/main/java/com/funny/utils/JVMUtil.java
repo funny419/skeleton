@@ -1,8 +1,6 @@
 package com.funny.utils;
 
-import com.funny.utils.helper.InOutStreamHelper;
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -77,7 +75,7 @@ public class JVMUtil {
             throw new RuntimeException();
         }
         finally {
-            InOutStreamHelper.close(fis);
+            InOutStreamUtil.close(fis);
         }
     }
 
@@ -93,7 +91,7 @@ public class JVMUtil {
             throw new RuntimeException("JVMUtil.getManifestFromJar Error",e);
         }
         finally {
-            InOutStreamHelper.close(fis);
+            InOutStreamUtil.close(fis);
         }
     }
 
@@ -219,5 +217,10 @@ public class JVMUtil {
 
             return null;
         }
+    }
+
+
+    private JVMUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

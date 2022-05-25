@@ -777,4 +777,9 @@ public class EscapeUtil {
 
         return needToChange;
     }
+
+
+    private EscapeUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

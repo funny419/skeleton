@@ -264,4 +264,9 @@ public class StringUtil {
     private static String getEmojiRemoveString(String input,String replaceStr) {
         return RegHelper.EMOJI_PATTERN.matcher(input).replaceAll(replaceStr);
     }
+
+
+    private StringUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

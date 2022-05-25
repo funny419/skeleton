@@ -58,4 +58,9 @@ public class CharsetUtil {
         OutputStreamWriter writer = new OutputStreamWriter(new ByteArrayOutputStream(),StandardCharsets.UTF_8);
         return writer.getEncoding();
     }
+
+
+    private CharsetUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

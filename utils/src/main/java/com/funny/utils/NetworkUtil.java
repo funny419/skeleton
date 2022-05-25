@@ -63,4 +63,9 @@ public class NetworkUtil {
 
         return RegHelper.isIP(ipAddress) ? ipAddress : LOCALHOST;
     }
+
+
+    private NetworkUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

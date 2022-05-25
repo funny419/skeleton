@@ -1,6 +1,6 @@
 package com.funny.utils;
 
-import com.funny.utils.extend.FileType;
+import com.funny.utils.constants.FileType;
 import com.funny.utils.helper.RegHelper;
 import com.funny.utils.helper.SysHelper;
 import org.apache.commons.lang3.ArrayUtils;
@@ -559,5 +559,10 @@ public class FileUtil {
 
     public static String inGB(long bytes) {
         return String.format("%(,.1fGB",(double)(bytes/KILOBYTE_UNIT/KILOBYTE_UNIT/KILOBYTE_UNIT));
+    }
+
+
+    private FileUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

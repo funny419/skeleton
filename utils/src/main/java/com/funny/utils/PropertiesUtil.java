@@ -55,4 +55,9 @@ public class PropertiesUtil {
             return new HashMap<>();
         }
     }
+
+
+    private PropertiesUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

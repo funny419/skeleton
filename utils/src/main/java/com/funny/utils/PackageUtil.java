@@ -330,4 +330,9 @@ public class PackageUtil {
 
         return getPackageName(className).replace('.','/');
     }
+
+
+    private PackageUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

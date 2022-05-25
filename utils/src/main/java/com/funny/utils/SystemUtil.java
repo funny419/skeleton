@@ -576,4 +576,9 @@ public class SystemUtil {
 
         return StringUtils.isEmpty(value) ? null : value;
     }
+
+
+    private SystemUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
+    }
 }

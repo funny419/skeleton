@@ -1,7 +1,6 @@
 package com.funny.utils;
 
 import com.funny.utils.constants.Emptys;
-import com.funny.utils.helper.InOutStreamHelper;
 import com.funny.utils.helper.LocaleInfo;
 import org.apache.commons.lang3.StringUtils;
 import java.net.URL;
@@ -22,7 +21,7 @@ public class LocaleUtil {
             List<Notifier> list = CollectionUtil.createLinkedList();
 
             for (URL file : files) {
-                for (String className : StringUtils.split(InOutStreamHelper.readText(file.openStream(),"UTF-8",true),"\r\n ")) {
+                for (String className : StringUtils.split(InOutStreamUtil.readText(file.openStream(),"UTF-8",true),"\r\n ")) {
                     list.add(Notifier.class.cast(ClassLoaderUtil.newInstance(className,ClassLoaderUtil.class)));
                 }
             }
@@ -298,5 +297,10 @@ public class LocaleUtil {
                 AVAILABLE_COUNTRIES.add(locale.getCountry());
             }
         }
+    }
+
+
+    private LocaleUtil() {
+        throw new IllegalStateException("THIS IS A UTILITY CLASS");
     }
 }

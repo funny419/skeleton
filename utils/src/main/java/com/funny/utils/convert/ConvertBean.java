@@ -2,6 +2,8 @@ package com.funny.utils.convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class ConvertBean {
@@ -244,6 +246,32 @@ public class ConvertBean {
 
     public Class<?>[] toClassArray(Object value) {
         return (Class<?>[]) objectConverter.toConvert(value,Class[].class);
+    }
+
+
+    public Date toDate(Object value) {
+        return (Date) objectConverter.toConvert(value,Date.class);
+    }
+
+    public Date toDate(Object value,Date defaultValue) {
+        Date result = (Date) objectConverter.toConvert(value,Date.class);
+        if (result == null) {
+            return defaultValue;
+        }
+        return result;
+    }
+
+
+    public Calendar toCalendar(Object value) {
+        return (Calendar) objectConverter.toConvert(value, Calendar.class);
+    }
+
+    public Calendar toCalendar(Object value, Calendar defaultValue) {
+        Calendar result = (Calendar) objectConverter.toConvert(value, Calendar.class);
+        if (result == null) {
+            return defaultValue;
+        }
+        return result;
     }
 
 
