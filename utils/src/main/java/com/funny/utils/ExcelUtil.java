@@ -96,7 +96,7 @@ public class ExcelUtil {
             for (int i=0;i<sheetNamesCount;i++) {
                 String sheetName = sheetNames[i];
                 sheets[i] = Optional.ofNullable(workbook.getSheet(sheetName))
-                            .orElseThrow(() -> new RuntimeException("SHEETNAME CAN NOT BE MATCHED"));
+                            .orElseThrow(() -> new RuntimeException("SHEET NAME CAN NOT BE MATCHED"));
             }
         }
 
@@ -129,11 +129,10 @@ public class ExcelUtil {
         return IntStream.range(0,sheets.length).mapToObj(sheetIndex -> {
             Sheet sheet = sheets[sheetIndex];
             List<Field> fieldList = Arrays.stream(source.getDeclaredFields())
-                    .filter(field -> field.isAnnotationPresent(SheetColumn.class) && field.getAnnotation(SheetColumn.class).imported())
-                    .collect(Collectors.toList());
+                                        .filter(field -> field.isAnnotationPresent(SheetColumn.class) && field.getAnnotation(SheetColumn.class).imported())
+                                        .collect(Collectors.toList());
 
-            int maxIndex = fieldList.stream()
-                                    .mapToInt(item -> item.getAnnotation(SheetColumn.class).index()).max().getAsInt();
+            int maxIndex = fieldList.stream().mapToInt(item -> item.getAnnotation(SheetColumn.class).index()).max().getAsInt();
 
             Row row;
             Cell cell;
@@ -150,7 +149,8 @@ public class ExcelUtil {
                     for (Field field : fieldList) {
                         SheetColumn sheetColumn = field.getAnnotation(SheetColumn.class);
                         int index = sheetColumn.index();
-                        if (index > row.getLastCellNum() - 1 || currentIndex > row.getLastCellNum() - 1) {
+                        int compare = row.getLastCellNum() - 1;
+                        if (index > compare || currentIndex > compare) {
                             continue;
                         }
 
@@ -285,39 +285,38 @@ public class ExcelUtil {
 
         Iterator<List<T>> iterator = dataList.iterator();
         while(iterator.hasNext()) {
-            String sheetName = sheetNames[i];
-            boolean isHiddenSheet = isHiddenSheets[i];
-            boolean inCludeHeader = inCludeHeaders[i];
-
             int rowNum = startRowIndexes[i];
             short startColumn = startColumnIndexes[i];
-            resultList = iterator.next();
 
             List<Field> fieldList = Arrays.stream(source.getDeclaredFields())
-                    .filter(field -> field.isAnnotationPresent(SheetColumn.class) && field.getAnnotation(SheetColumn.class).exported())
-                    .collect(Collectors.toList());
+                                        .filter(field -> field.isAnnotationPresent(SheetColumn.class) && field.getAnnotation(SheetColumn.class).exported())
+                                        .collect(Collectors.toList());
 
             if (CollectionUtils.isEmpty(fieldList)) {
                 continue;
             }
 
             int maxIndex = fieldList.stream().mapToInt(item -> item.getAnnotation(SheetColumn.class).index()).max().getAsInt();
-            sheet = workbook.createSheet(StringUtils.isEmpty(sheetName) ? ExcelEntity.SHEET_PREFIX + sheetIndex++ : sheetName);
+
+            boolean isHiddenSheet = isHiddenSheets[i];
             if (isHiddenSheet) {
                 workbook.setSheetHidden(i,true);
             }
 
-            row = null;
             int currentIndex = maxIndex;
+            String sheetName = sheetNames[i];
+            sheet = workbook.createSheet(StringUtils.isEmpty(sheetName) ? ExcelEntity.SHEET_PREFIX + sheetIndex++ : sheetName);
+
+            row = null;
+            boolean inCludeHeader = inCludeHeaders[i];
             if (inCludeHeader) {
                 row = sheet.createRow(rowNum++);
             }
 
             for (Field field : fieldList) {
                 SheetColumn sheetColumn = field.getAnnotation(SheetColumn.class);
-                int index = sheetColumn.index();
-                int width = sheetColumn.width();
 
+                int index = sheetColumn.index();
                 index = (index == -1 ? ++currentIndex : index) + startColumn;
                 if (Objects.nonNull(row)) {
                     String name = sheetColumn.name();
@@ -326,6 +325,7 @@ public class ExcelUtil {
                     fillHeaderCell(workbook,cell,name,required);
                 }
 
+                int width = sheetColumn.width();
                 if (width == -1) {
                     sheet.autoSizeColumn(index);
                 } else {
@@ -333,10 +333,12 @@ public class ExcelUtil {
                 }
             }
 
+            resultList = iterator.next();
             for (T result : resultList) {
                 currentIndex = maxIndex;
                 for (Field field : fieldList) {
                     SheetColumn sheetColumn = field.getAnnotation(SheetColumn.class);
+
                     int index = sheetColumn.index();
                     index = (index == -1 ? ++currentIndex:index) + startColumn;
 
@@ -365,6 +367,7 @@ public class ExcelUtil {
 
     private static void fillHeaderCell(Workbook workbook,Cell cell,Object value,boolean required) {
         CellStyle cellStyle = workbook.createCellStyle();
+
         if (required) {
             cellStyle.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.index);
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -386,6 +389,7 @@ public class ExcelUtil {
 
     private static void fillDataCell(Workbook workbook,Cell cell,Object value,String format) {
         CellStyle cellStyle = workbook.createCellStyle();
+
         if (Objects.isNull(value)) {
             cell.setCellStyle(cellStyle);
             return;
@@ -441,18 +445,16 @@ public class ExcelUtil {
         }
 
         int validSize = excelDataList.stream()
-                .filter(excelData -> ArrayUtils.isNotEmpty(excelData.getValues()))
-                .map(ExcelData::generateUniqueKey)
-                .collect(Collectors.toSet()).size();
+                                    .filter(excelData -> ArrayUtils.isNotEmpty(excelData.getValues()))
+                                    .map(ExcelData::generateUniqueKey)
+                                    .collect(Collectors.toSet()).size();
 
         if (validSize > 3) {
             dropDownListWithHiddenSheet(workbook,excelDataList);
             return;
         }
 
-        int maxLength = excelDataList.stream()
-                        .mapToInt(item -> calStringArrayTotalLength(item.getValues())).max().orElse(0);
-
+        int maxLength = excelDataList.stream().mapToInt(item -> calStringArrayTotalLength(item.getValues())).max().orElse(0);
         if (maxLength > 256 - 1) {
             dropDownListWithHiddenSheet(workbook,excelDataList);
             return;
@@ -464,8 +466,8 @@ public class ExcelUtil {
 
     private static void dropDownListLessByte(Workbook workbook,List<ExcelData> excelDataList) {
         excelDataList.stream()
-                .filter(excelData -> ArrayUtils.isNotEmpty(excelData.getValues()) || StringUtils.isNotEmpty(excelData.getFormula()))
-                .forEach(excelData -> createDataValidation(workbook,excelData));
+                    .filter(excelData -> ArrayUtils.isNotEmpty(excelData.getValues()) || StringUtils.isNotEmpty(excelData.getFormula()))
+                    .forEach(excelData -> createDataValidation(workbook,excelData));
     }
 
 
@@ -512,9 +514,10 @@ public class ExcelUtil {
             }
 
             rowIndex = 0;
-            String dataName = Optional.ofNullable(excelData.getDataName()).orElse("");
             row = getRow(sheet,rowIndex++);
             cell = getCell(row,colIndex);
+
+            String dataName = Optional.ofNullable(excelData.getDataName()).orElse("");
             fillHeaderCell(workbook,cell,dataName,false);
 
             for (String value : values) {
@@ -526,6 +529,7 @@ public class ExcelUtil {
             String columnName = ConverterUtil.toString(ConverterUtil.toCharacter(A + colIndex++));
             formula = String.format(FORMULA_FORMAT,HIDDEN_SHEET_NAME,columnName,columnName,values.length+1);
             formulaMap.put(excelData.generateUniqueKey(),formula);
+
             createDataValidation(workbook,excelData.formula(formula));
         }
     }
@@ -574,6 +578,7 @@ public class ExcelUtil {
         String formula = excelData.getFormula();
         DataValidationHelper helper = sheet.getDataValidationHelper();
         CellRangeAddressList addressList = new CellRangeAddressList(firstRow,lastRow,firstCol,lastCol);
+
         DataValidationConstraint constraint = StringUtils.isEmpty(formula) ? helper.createExplicitListConstraint(excelData.getValues()) : helper.createFormulaListConstraint(formula);
         DataValidation validation = helper.createValidation(constraint,addressList);
 
