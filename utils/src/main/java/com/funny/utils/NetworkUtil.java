@@ -5,7 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 
 public class NetworkUtil {
@@ -62,6 +65,40 @@ public class NetworkUtil {
         }
 
         return RegHelper.isIP(ipAddress) ? ipAddress : LOCALHOST;
+    }
+
+
+    public static String getIp() throws SocketException {
+        Enumeration<NetworkInterface> network = NetworkInterface.getNetworkInterfaces();
+
+        String netIp = "";
+        String localIp = "";
+
+        InetAddress ip;
+        boolean found = false;
+        while (network.hasMoreElements() && !found) {
+            NetworkInterface nio = network.nextElement();
+            Enumeration<InetAddress> address = nio.getInetAddresses();
+            while (address.hasMoreElements()) {
+                ip = address.nextElement();
+
+                boolean isSite = ip.isSiteLocalAddress();
+                boolean isLoopback = ip.isLoopbackAddress();
+                boolean isContains = ip.getHostAddress().contains(":");
+
+                if (!isLoopback && !isContains) {
+                    if (isSite) {
+                        localIp = ip.getHostAddress();
+                    } else {
+                        netIp = ip.getHostAddress();
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return StringUtils.isNotEmpty(netIp) ? netIp : localIp;
     }
 
 
