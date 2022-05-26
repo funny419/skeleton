@@ -3,14 +3,18 @@ package com.funny.utils;
 import com.funny.utils.constants.Emptys;
 import com.funny.utils.convert.ConvertBean;
 import okhttp3.HttpUrl;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.NumberUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 
 /**
